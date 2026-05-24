@@ -106,7 +106,7 @@ https://github.com/bozzbet/house-of-acs/
 ## Suggested Repo Name
 
 ```text
-pension-clinic-website
+house-of-acs
 ```
 
 ## Suggested Next Development Steps
