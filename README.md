@@ -33,7 +33,7 @@ Later, use one of these backend options:
 ## Project Structure
 
 ```text
-pension-clinic-website/
+house-of-acs/
 ├── index.html
 ├── admin.html
 ├── assets/
@@ -60,7 +60,7 @@ Open `index.html` directly in your browser.
 Or run a simple local server:
 
 ```bash
-cd pension-clinic-website
+cd house-of-acs
 python3 -m http.server 8080
 ```
 
@@ -82,7 +82,7 @@ git add .
 git commit -m "Initial pension clinic website"
 
 git branch -M main
-git remote add origin https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME.git
+git remote add origin https://github.com/bozzbet/house-of-acs.git
 git push -u origin main
 ```
 
@@ -100,7 +100,7 @@ git push -u origin main
 Your site will be available at:
 
 ```text
-https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPO_NAME/
+https://github.com/bozzbet/house-of-acs/
 ```
 
 ## Suggested Repo Name
