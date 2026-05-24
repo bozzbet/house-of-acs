@@ -177,7 +177,7 @@ nav a:hover { color: var(--primary); }
 .hero-card-top {
   min-height: 210px;
   border-radius: 22px;
-  background: linear-gradient(135deg, rgba(31,122,140,.8), rgba(199,146,62,.8));
+  background: url("../images/acs-office.jpg") center / cover;
   margin-bottom: 18px;
 }
 
@@ -232,11 +232,12 @@ section { padding: 76px 0; }
 
 .room-image {
   height: 190px;
-  background: linear-gradient(135deg, #cbd5e1, #94a3b8);
+  background-position: center;
+  background-size: cover;
 }
-.room-1 { background: linear-gradient(135deg, #e2e8f0, #c7923e); }
-.room-2 { background: linear-gradient(135deg, #dbeafe, #1f7a8c); }
-.room-3 { background: linear-gradient(135deg, #fef3c7, #334155); }
+.room-1 { background-image: url("../images/acs-room.jpg"); }
+.room-2 { background-image: url("../images/acs-room2.jpg"); }
+.room-3 { background-image: url("../images/acs-room3.jpg"); }
 
 .card h3 { margin-bottom: 8px; font-size: 1.2rem; }
 .card p { color: var(--muted); font-size: 0.96rem; }
