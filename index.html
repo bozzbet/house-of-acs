@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pension House & Medical Clinic</title>
+  <meta name="description" content="Integrated pension house website and Doctor's clinic appointment system." />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+
+<body>
+  <header>
+    <div class="container navbar">
+      <a class="brand" href="#home">
+        <span class="brand-logo">PH</span>
+        <span>ACS Pension House & Dr. Allan Dideles Medical Clinic</span>
+      </a>
+
+      <button class="menu-toggle" id="menuToggle" type="button">☰</button>
+
+      <nav id="siteNav">
+        <ul>
+          <li><a href="#rooms">Rooms</a></li>
+          <li><a href="#amenities">Amenities</a></li>
+          <li><a href="#clinic">Clinic</a></li>
+          <li><a href="#announcements">Updates</a></li>
+          <li><a href="#location">Location</a></li>
+          <li><a class="nav-cta" href="#appointment">Set Appointment</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">Comfortable Stay • Convenient Clinic Access</div>
+          <h1>One trusted place for lodging and clinic appointments.</h1>
+          <p>
+            Welcome to our integrated pension house and medical clinic website.
+            Guests can inquire about rooms, while patients can reserve clinic
+            appointment slots in advance using a QR code.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-secondary" href="#booking">Book a Room</a>
+            <a class="btn btn-primary" href="#appointment">Set Clinic Appointment</a>
+            <a class="btn btn-outline" href="#location">View Location</a>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <div class="hero-card-top"></div>
+          <div class="quick-card-grid">
+            <div class="quick-card">
+              <strong>ACS Pension House</strong>
+              <span>Clean rooms, amenities, and booking inquiries.</span>
+            </div>
+            <div class="quick-card">
+              <strong>Dr. Allan Dideles Medical Clinic</strong>
+              <span>QR appointment scheduling and secretary dashboard.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="rooms">
+      <div class="container">
+        <div class="section-heading">
+          <div class="section-label">Pension House</div>
+          <h2>Rooms for short stays, family visits, and clinic appointments.</h2>
+          <p>Showcase room types, capacity, photos, inclusions, and rates. For version 1, room booking can start as a simple inquiry form.</p>
+        </div>
+
+        <div class="grid-3">
+          <article class="card">
+            <div class="room-image room-1"></div>
+            <div class="card-body">
+              <h3>Standard Room</h3>
+              <p>Good for solo guests, family, or group visits. Includes basic amenities and private bathroom.</p>
+              <div class="price">Sample Rate: ₱300/night</div>
+              <a class="btn btn-outline" href="#booking">Inquire Now</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="room-image room-2"></div>
+            <div class="card-body">
+              <h3>Family Room</h3>
+              <p>Comfortable space for small families or group guests visiting the area.</p>
+              <div class="price">Sample Rate: ₱600/night</div>
+              <a class="btn btn-outline" href="#booking">Inquire Now</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="room-image room-3"></div>
+            <div class="card-body">
+              <h3>Deluxe Room</h3>
+              <p>Extra comfort with upgraded room features for longer or special stays.</p>
+              <div class="price">Sample Rate: ₱500/night</div>
+              <a class="btn btn-outline" href="#booking">Inquire Now</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="amenities" class="white-section">
+      <div class="container">
+        <div class="section-heading center">
+          <div class="section-label">Amenities</div>
+          <h2>Designed for comfort and convenience.</h2>
+          <p>Use this section to list all pension house facilities and useful clinic-related conveniences.</p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card amenity"><div class="icon">📶</div><div><h3>Wi-Fi Access</h3><p>Reliable internet access for guests and visitors.</p></div></div>
+          <div class="card amenity"><div class="icon">🚗</div><div><h3>Parking Area</h3><p>Convenient parking space for guests and patients.</p></div></div>
+          <div class="card amenity"><div class="icon">❄️</div><div><h3>Air-Conditioned Rooms</h3><p>Comfortable rooms for restful overnight stays.</p></div></div>
+          <div class="card amenity"><div class="icon">🛁</div><div><h3>Private Bathroom</h3><p>Clean private facilities for each room type.</p></div></div>
+          <div class="card amenity"><div class="icon">🩺</div><div><h3>Clinic Nearby</h3><p>Patients can stay close before or after appointments.</p></div></div>
+          <div class="card amenity"><div class="icon">🛡️</div><div><h3>Safe Environment</h3><p>Add security, CCTV, or staff availability details here.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="clinic" class="clinic-band">
+      <div class="container clinic-panel">
+        <div>
+          <div class="section-label">Dr. Allan Dideles Medical Clinic</div>
+          <h2>Patients can reserve a clinic time slot by scanning a QR code.</h2>
+          <p>
+            The QR code should point to the online appointment page. Patients can choose a future date,
+            select an available slot, enter their information, and receive a confirmation.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#appointment">Open Appointment Form</a>
+            <a class="btn btn-outline" href="admin.html">Secretary Dashboard Demo</a>
+          </div>
+        </div>
+
+        <div class="qr-box">
+          <div class="qr-placeholder"></div>
+          <h3>Scan to Set Appointment</h3>
+          <p class="small-note">Replace this placeholder with a real QR code linking to this page or `/clinic/appointment`.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="appointment">
+      <div class="container grid-2">
+        <div>
+          <div class="section-heading">
+            <div class="section-label">Appointment Form</div>
+            <h2>Clinic appointment reservation sample.</h2>
+            <p>
+              GitHub Pages is static, so this demo stores appointments in the visitor's browser using localStorage.
+              Later, connect this form to a backend API that writes to `data/appointments.json` or a database.
+            </p>
+          </div>
+
+          <div class="form-wrap">
+            <form id="appointmentForm">
+              <div class="form-row">
+                <div>
+                  <label for="patientName">Patient Name</label>
+                  <input id="patientName" name="patientName" type="text" placeholder="Juan Dela Cruz" required />
+                </div>
+                <div>
+                  <label for="contactNumber">Contact Number</label>
+                  <input id="contactNumber" name="contactNumber" type="tel" placeholder="0917 123 4567" required />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div>
+                  <label for="appointmentDate">Appointment Date</label>
+                  <input id="appointmentDate" name="appointmentDate" type="date" required />
+                </div>
+                <div>
+                  <label for="appointmentTime">Time Slot</label>
+                  <select id="appointmentTime" name="appointmentTime" required>
+                    <option value="">Select time</option>
+                    <option>08:00 AM</option><option>08:30 AM</option><option>09:00 AM</option><option>09:30 AM</option>
+                    <option>10:00 AM</option><option>10:30 AM</option><option>11:00 AM</option><option>11:30 AM</option>
+                    <option>01:00 PM</option><option>01:30 PM</option><option>02:00 PM</option><option>02:30 PM</option>
+                    <option>03:00 PM</option><option>03:30 PM</option><option>04:00 PM</option><option>04:30 PM</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div>
+                  <label for="age">Age</label>
+                  <input id="age" name="age" type="number" min="0" placeholder="35" />
+                </div>
+                <div>
+                  <label for="patientType">Patient Type</label>
+                  <select id="patientType" name="patientType">
+                    <option>New Patient</option>
+                    <option>Returning Patient</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label for="reason">Reason for Visit</label>
+                <textarea id="reason" name="reason" placeholder="Example: Check-up, follow-up, consultation..."></textarea>
+              </div>
+
+              <button class="btn btn-primary" type="submit">Submit Appointment</button>
+              <p id="appointmentMessage" class="small-note"></p>
+            </form>
+          </div>
+        </div>
+
+        <div class="appointments-preview">
+          <div class="appointments-preview-header">
+            <div>
+              <h3>Appointment Preview</h3>
+              <p>Submitted demo appointments appear here and in the admin demo.</p>
+            </div>
+            <a class="btn btn-outline" href="admin.html">Open Admin</a>
+          </div>
+
+          <table>
+            <thead>
+              <tr><th>Time</th><th>Patient</th><th>Reason</th><th>Status</th></tr>
+            </thead>
+            <tbody id="appointmentTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="announcements" class="white-section">
+      <div class="container">
+        <div class="section-heading">
+          <div class="section-label">Announcements / Updates</div>
+          <h2>Latest pension house and clinic notices.</h2>
+          <p>Secretary or admin can post clinic schedules, room promos, holiday notices, doctor availability, and general updates.</p>
+        </div>
+
+        <div class="grid-3" id="announcementCards"></div>
+      </div>
+    </section>
+
+    <section id="location">
+      <div class="container">
+        <div class="section-heading center">
+          <div class="section-label">Location</div>
+          <h2>Find us easily.</h2>
+          <p>Replace the sample address with your real location and embed your Google Map iframe later.</p>
+        </div>
+
+        <div class="location-box">
+          <div class="map-card">
+            <h3>Location</h3>
+            <p>ACS Pension House, Rizal Street, Zone I, Koronadal City, South Cotabato, Philippines, 9506</p>
+            <p class="small-note">Nearby landmarks: public market, hospital, transport terminal, or municipal hall.</p>
+            <a class="btn btn-primary" href="#contact">Contact Us</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="booking" class="contact-section">
+      <div class="container grid-2">
+        <div>
+          <div class="section-heading">
+            <div class="section-label">Pension House Booking</div>
+            <h2>Room booking inquiry sample.</h2>
+            <p>For version 1, guests can submit a booking inquiry. Later this can become a full room reservation system.</p>
+          </div>
+
+          <div class="form-wrap">
+            <form id="bookingForm">
+              <div class="form-row">
+                <div><label for="guestName">Guest Name</label><input id="guestName" type="text" placeholder="Guest full name" required /></div>
+                <div><label for="guestContact">Contact Number</label><input id="guestContact" type="tel" placeholder="Contact number" required /></div>
+              </div>
+
+              <div class="form-row">
+                <div><label for="checkIn">Check-in</label><input id="checkIn" type="date" required /></div>
+                <div><label for="checkOut">Check-out</label><input id="checkOut" type="date" required /></div>
+              </div>
+
+              <div class="form-row">
+                <div><label for="guests">Number of Guests</label><input id="guests" type="number" min="1" placeholder="2" /></div>
+                <div><label for="roomType">Preferred Room</label><select id="roomType"><option>Standard Room</option><option>Family Room</option><option>Deluxe Room</option></select></div>
+              </div>
+
+              <div><label for="bookingMessage">Message</label><textarea id="bookingMessage" placeholder="Special request, arrival time, parking request..."></textarea></div>
+
+              <button class="btn btn-secondary" type="submit">Send Booking Inquiry</button>
+              <p id="bookingMessageOutput" class="small-note"></p>
+            </form>
+          </div>
+        </div>
+
+        <div id="contact">
+          <div class="section-heading">
+            <div class="section-label">Contact</div>
+            <h2>Contact and business information.</h2>
+            <p>Add your official phone number, Facebook page, email, address, and clinic hours here.</p>
+          </div>
+
+          <div class="card"><div class="card-body"><h3>Pension House</h3><p>Phone: 0917 000 0000</p><p>Email: pension@example.com</p><p>Office Hours: 8:00 AM - 8:00 PM</p></div></div>
+          <br />
+          <div class="card"><div class="card-body"><h3>Medical Clinic</h3><p>Phone: 0918 000 0000</p><p>Clinic Hours: Monday to Saturday, 8:00 AM - 5:00 PM</p><p>Appointment Page: this website's appointment section</p></div></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-grid">
+      <div><strong>Pension House + Medical Clinic</strong><p>Integrated lodging and clinic appointment website.</p></div>
+      <div><p>© 2026 Your Business Name. All rights reserved.</p></div>
+    </div>
+  </footer>
+
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

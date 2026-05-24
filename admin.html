@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Secretary Dashboard Demo</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <header>
+    <div class="container navbar">
+      <a class="brand" href="index.html">
+        <span class="brand-logo">PH</span>
+        <span>Secretary Dashboard</span>
+      </a>
+      <nav>
+        <ul>
+          <li><a href="index.html">Website</a></li>
+          <li><button class="nav-cta button-link" id="printBtn" type="button">Print Report</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <div class="container">
+        <div class="section-heading">
+          <div class="section-label">Admin Demo</div>
+          <h1>Clinic Appointments</h1>
+          <p>
+            This static demo reads appointments from browser localStorage.
+            A real admin dashboard should use authentication and a backend API.
+          </p>
+        </div>
+
+        <div class="admin-toolbar">
+          <div>
+            <label for="filterDate">Filter by Date</label>
+            <input id="filterDate" type="date" />
+          </div>
+          <div>
+            <label for="filterStatus">Filter by Status</label>
+            <select id="filterStatus">
+              <option value="">All</option>
+              <option>confirmed</option>
+              <option>pending</option>
+              <option>completed</option>
+              <option>cancelled</option>
+              <option>no-show</option>
+            </select>
+          </div>
+          <div>
+            <label for="searchText">Search</label>
+            <input id="searchText" type="search" placeholder="Name or contact" />
+          </div>
+          <div>
+            <label>&nbsp;</label>
+            <button class="btn btn-primary" id="exportCsvBtn" type="button">Export CSV</button>
+          </div>
+        </div>
+
+        <div class="appointments-preview light-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Patient</th>
+                <th>Contact</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Update Status</th>
+              </tr>
+            </thead>
+            <tbody id="adminAppointmentTable"></tbody>
+          </table>
+        </div>
+
+        <p class="small-note">
+          Note: Data here is only on this browser. GitHub Pages cannot be used as a private patient database.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>

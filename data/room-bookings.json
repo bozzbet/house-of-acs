@@ -1,0 +1,17 @@
+[
+  {
+    "id": "BOOK-20260524-0001",
+    "createdAt": "2026-05-24T11:10:00",
+    "status": "new",
+    "guest": {
+      "name": "Maria Santos",
+      "contactNumber": "09181234567",
+      "email": "maria@example.com"
+    },
+    "checkIn": "2026-06-01",
+    "checkOut": "2026-06-03",
+    "numberOfGuests": 2,
+    "preferredRoom": "Standard Room",
+    "message": "Need parking if available."
+  }
+]

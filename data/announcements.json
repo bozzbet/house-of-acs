@@ -1,0 +1,12 @@
+[
+  {
+    "id": "ANN-001",
+    "createdAt": "2026-05-24T09:00:00",
+    "updatedAt": "2026-05-24T09:00:00",
+    "title": "Clinic Schedule Update",
+    "category": "Clinic",
+    "content": "The clinic will be open from 8:00 AM to 12:00 PM this Saturday.",
+    "status": "published",
+    "publishDate": "2026-05-24"
+  }
+]

@@ -1,0 +1,21 @@
+[
+  {
+    "id": "APT-20260524-0001",
+    "createdAt": "2026-05-24T10:25:00",
+    "updatedAt": "2026-05-24T10:25:00",
+    "date": "2026-05-27",
+    "time": "09:30 AM",
+    "status": "confirmed",
+    "patient": {
+      "name": "Juan Dela Cruz",
+      "age": 35,
+      "gender": "Male",
+      "contactNumber": "09171234567",
+      "address": "Sample Address",
+      "patientType": "New Patient"
+    },
+    "reasonForVisit": "Check-up",
+    "notes": "",
+    "source": "sample"
+  }
+]
