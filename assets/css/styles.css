@@ -18,7 +18,10 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 72px;
+}
 
 body {
   font-family: var(--font-body);
@@ -40,6 +43,10 @@ p {
 }
 
 a { color: inherit; text-decoration: none; }
+
+main#home {
+  scroll-margin-top: 72px;
+}
 
 .container {
   width: min(1120px, calc(100% - 32px));
@@ -185,7 +192,7 @@ nav a:hover { color: var(--primary); }
     radial-gradient(circle at 10% 10%, rgba(31, 122, 140, 0.18), transparent 32%),
     radial-gradient(circle at 90% 20%, rgba(199, 146, 62, 0.18), transparent 26%),
     linear-gradient(135deg, #ffffff, #eef9fb);
-  padding: 84px 0 64px;
+  padding: 52px 0 64px;
 }
 
 .hero-grid {
@@ -211,7 +218,7 @@ nav a:hover { color: var(--primary); }
 .hero h1 {
   max-width: 660px;
   font-size: 4.35rem;
-  line-height: 0.95;
+  line-height: 1.04;
   letter-spacing: 0;
   margin-bottom: 18px;
 }
@@ -319,6 +326,13 @@ section { padding: 76px 0; }
   font-weight: 700;
   letter-spacing: 0;
   text-shadow: 0 12px 26px rgba(157, 106, 46, 0.18);
+}
+
+.hero-accent {
+  font-size: 0.92em;
+  line-height: 1.18;
+  padding-bottom: 0.08em;
+  vertical-align: -0.03em;
 }
 
 .section-heading p {
