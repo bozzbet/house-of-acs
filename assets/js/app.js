@@ -27,6 +27,30 @@ function saveAppointments(appointments) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(appointments, null, 2));
 }
 
+function escapeHtml(value) {
+  return String(value || "").replace(/[&<>"']/g, (character) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  })[character]);
+}
+
+function setMessage(elementId, message, type = "") {
+  const element = document.getElementById(elementId);
+  if (!element) return;
+  element.textContent = message;
+  element.className = `form-message ${type}`.trim();
+}
+
+function getLocalDateString(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 function makeAppointmentId(date) {
   return "APT-" + date.replaceAll("-", "") + "-" + Math.floor(Math.random() * 9000 + 1000);
 }
@@ -44,10 +68,10 @@ function renderAppointments() {
 
   table.innerHTML = appointments.slice(-8).map((appointment) => `
     <tr>
-      <td>${appointment.time}</td>
-      <td>${appointment.patient.name}</td>
-      <td>${appointment.reasonForVisit || "Appointment"}</td>
-      <td><span class="status ${appointment.status}">${appointment.status}</span></td>
+      <td>${escapeHtml(appointment.time)}</td>
+      <td>${escapeHtml(appointment.patient?.name)}</td>
+      <td>${escapeHtml(appointment.reasonForVisit || "Appointment")}</td>
+      <td><span class="status ${escapeHtml(appointment.status)}">${escapeHtml(appointment.status)}</span></td>
     </tr>
   `).join("");
 }
@@ -59,9 +83,9 @@ function renderAnnouncements() {
   container.innerHTML = defaultAnnouncements.map((announcement) => `
     <article class="card announcement-card">
       <div class="card-body">
-        <div class="announcement-meta">${announcement.category}</div>
-        <h3>${announcement.title}</h3>
-        <p>${announcement.content}</p>
+        <div class="announcement-meta">${escapeHtml(announcement.category)}</div>
+        <h3>${escapeHtml(announcement.title)}</h3>
+        <p>${escapeHtml(announcement.content)}</p>
       </div>
     </article>
   `).join("");
@@ -78,11 +102,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const appointmentDate = document.getElementById("appointmentDate");
   const checkIn = document.getElementById("checkIn");
   const checkOut = document.getElementById("checkOut");
-  const today = new Date().toISOString().split("T")[0];
+  const today = getLocalDateString();
 
   if (appointmentDate) appointmentDate.min = today;
   if (checkIn) checkIn.min = today;
   if (checkOut) checkOut.min = today;
+
+  if (checkIn && checkOut) {
+    checkIn.addEventListener("change", () => {
+      checkOut.min = checkIn.value || today;
+      if (checkOut.value && checkOut.value <= checkIn.value) checkOut.value = "";
+    });
+  }
 
   const appointmentForm = document.getElementById("appointmentForm");
 
@@ -95,11 +126,26 @@ document.addEventListener("DOMContentLoaded", () => {
       const patientName = document.getElementById("patientName").value.trim();
       const contactNumber = document.getElementById("contactNumber").value.trim();
 
+      if (!date || date < today) {
+        setMessage("appointmentMessage", "Please choose today or a future appointment date.", "error");
+        return;
+      }
+
+      if (!time) {
+        setMessage("appointmentMessage", "Please choose an available time slot.", "error");
+        return;
+      }
+
+      if (!patientName || !contactNumber) {
+        setMessage("appointmentMessage", "Please enter the patient name and contact number.", "error");
+        return;
+      }
+
       const appointments = getAppointments();
       const duplicate = appointments.some((appointment) => appointment.date === date && appointment.time === time && appointment.status !== "cancelled");
 
       if (duplicate) {
-        document.getElementById("appointmentMessage").textContent = "That time slot is already reserved in this browser demo. Please choose another time.";
+        setMessage("appointmentMessage", "That time slot is already reserved in this browser demo. Please choose another time.", "error");
         return;
       }
 
@@ -124,8 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
       appointments.push(appointment);
       saveAppointments(appointments);
 
-      document.getElementById("appointmentMessage").textContent =
-        `Sample confirmation: ${patientName} is reserved for ${date} at ${time}. Appointment ID: ${appointment.id}.`;
+      setMessage("appointmentMessage", `Sample confirmation: ${patientName} is reserved for ${date} at ${time}. Appointment ID: ${appointment.id}.`, "success");
 
       this.reset();
       if (appointmentDate) appointmentDate.min = today;
@@ -140,6 +185,19 @@ document.addEventListener("DOMContentLoaded", () => {
       event.preventDefault();
 
       const guestName = document.getElementById("guestName").value.trim();
+      const checkInDate = document.getElementById("checkIn").value;
+      const checkOutDate = document.getElementById("checkOut").value;
+
+      if (!guestName) {
+        setMessage("bookingMessageOutput", "Please enter the guest name.", "error");
+        return;
+      }
+
+      if (!checkInDate || !checkOutDate || checkOutDate <= checkInDate) {
+        setMessage("bookingMessageOutput", "Please choose valid check-in and check-out dates.", "error");
+        return;
+      }
+
       const booking = {
         id: "BOOK-" + Date.now(),
         createdAt: new Date().toISOString(),
@@ -148,8 +206,8 @@ document.addEventListener("DOMContentLoaded", () => {
           name: guestName,
           contactNumber: document.getElementById("guestContact").value.trim()
         },
-        checkIn: document.getElementById("checkIn").value,
-        checkOut: document.getElementById("checkOut").value,
+        checkIn: checkInDate,
+        checkOut: checkOutDate,
         numberOfGuests: document.getElementById("guests").value,
         preferredRoom: document.getElementById("roomType").value,
         message: document.getElementById("bookingMessage").value
@@ -159,10 +217,11 @@ document.addEventListener("DOMContentLoaded", () => {
       bookings.push(booking);
       localStorage.setItem(BOOKING_KEY, JSON.stringify(bookings, null, 2));
 
-      document.getElementById("bookingMessageOutput").textContent =
-        `Sample message: Booking inquiry received for ${guestName}. In the real app, this will be saved to data/room-bookings.json or a backend database.`;
+      setMessage("bookingMessageOutput", `Sample message: Booking inquiry received for ${guestName}. Staff should confirm availability and QR/GCash payment instructions.`, "success");
 
       this.reset();
+      if (checkIn) checkIn.min = today;
+      if (checkOut) checkOut.min = today;
     });
   }
 

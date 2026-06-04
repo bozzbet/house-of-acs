@@ -2,60 +2,108 @@
 
 ## Main Goal
 
-Create one website for both the Pension House and Medical Clinic.
+Create a polished, professional website for one integrated brand:
+- ACS Pension House
+- Dr. Allan Dideles Medical Clinic
 
-The public website should promote the pension house, show rooms and amenities, provide contact/booking information, and also allow patients to make clinic appointments.
+The public site should promote the pension house stay and the clinic appointment service side by side, while supporting two main user journeys:
+1. Pension house guests can explore room options, check availability, send a booking inquiry, and pay with QR or GCash.
+2. Clinic patients can scan a QR code, choose an appointment date/time, submit their details, and receive confirmation.
 
-The clinic side should include a simple appointment reservation system where patients can scan a QR code, choose a date/time slot, and submit their details.
+This first version remains GitHub Pages-friendly and uses localStorage for appointment/demo data. It should clearly communicate that a backend API is required for real secure data storage.
 
-## Public Website Sections
+## Target Sections
 
-1. Hero
-2. Rooms
-3. Amenities
-4. Location
-5. Announcements / Updates
-6. Contact / Booking / Appointment
+1. Hero / Brand Promise
+2. Pension House Rooms & Availability
+3. Pension House Booking Inquiry
+4. Clinic Appointment Booking with QR Callout
+5. Appointment Form & Preview
+6. Secretary Dashboard Demo
+7. Announcements / Updates
+8. Location & Contact
+9. Payment Options (QR / GCash)
 
-## Clinic Appointment Flow
+## User Journeys
 
-1. Patient scans clinic QR code.
-2. QR code opens the appointment page.
-3. Patient selects date and time slot.
-4. Patient enters personal details and reason for visit.
-5. Website checks if slot is available.
-6. Appointment is saved.
-7. Patient sees confirmation.
+### Pension House Guest
+- Land on homepage
+- Review room types and sample rates
+- See availability messaging
+- Fill booking inquiry form with check-in/check-out dates and room preference
+- Receive confirmation note and next steps for payment via QR/GCash
 
-## Admin / Secretary Features
+### Clinic Patient
+- Scan clinic QR code
+- Open appointment section/page
+- Choose a future date and available slot
+- Enter patient name, contact, age, type, and reason for visit
+- Submit appointment request
+- Receive sample confirmation message and appointment preview
 
-- View today's appointments
-- Select other dates
-- Search patient name or contact number
-- Filter by status
-- Edit appointments
-- Reschedule appointments
-- Cancel appointments
-- Mark completed
-- Mark no-show
-- Print daily list
-- Export CSV
-- Generate reports
+### Secretary / Admin
+- Open `admin.html`
+- View appointments saved in the demo environment
+- Filter by date or status
+- Search by patient name or contact number
+- Update appointment status
+- Export appointment data to CSV
+- Print a report
 
-## JSON Files
+## Design Principles
 
-- `data/appointments.json`
-- `data/announcements.json`
-- `data/room-bookings.json`
+- Elegant, professional, and clean layout
+- Clear separation between pension house and clinic services
+- Simple, readable typography and soft modern color palette
+- Strong CTA buttons for booking and appointment actions
+- Responsive layout for mobile and desktop
+- Consistent card-based content blocks and form styling
+- Prominent QR code section for clinic appointment access
+- Explicit demo limitations and backend future path
 
-## Build Order
+## Data & Features
 
-1. Public homepage
-2. Appointment form
-3. Static demo appointment saving
-4. Secretary dashboard
-5. Announcements
-6. Booking inquiry form
-7. Backend API
-8. Real JSON/database appointment storage
-9. Reports
+- Preserve current static/demo behavior:
+  - `assets/js/app.js` for appointment form, booking inquiry, localStorage demo
+  - `assets/js/admin.js` for dashboard filters, status update, CSV export
+- Keep announcements either hard-coded in JS or sourced from `data/announcements.json`
+- Keep sample JSON files for reference:
+  - `data/appointments.json`
+  - `data/announcements.json`
+  - `data/room-bookings.json`
+
+## Implementation Plan
+
+1. Redesign `index.html`
+   - Hero with integrated brand messaging
+   - Pension House rooms and amenities
+   - Clinic QR code section and appointment workflow
+   - Booking inquiry form and appointment form cards
+   - Contact and location details
+2. Update `assets/css/styles.css`
+   - Refined typography, spacing, and color palette
+   - Responsive grid layout and card styling
+   - Button and form field polish
+   - QR card and announcement section styling
+3. Improve `assets/js/app.js`
+   - Better date validation and messaging
+   - Keep localStorage appointment save behavior
+   - Keep booking inquiry flow and form feedback
+4. Improve `admin.html`
+   - Polish dashboard layout and table readability
+   - Maintain search/filter/export and status update interactions
+5. Improve `assets/js/admin.js`
+   - Keep current filtering and CSV export logic
+   - Ensure status updates persist in localStorage demo
+6. Validate on browser
+   - Test homepage and admin page responsiveness
+   - Verify appointment and booking form submissions
+   - Verify admin filtering, export, and status updates
+
+## Future Backend Considerations
+
+- Add secure appointment storage with a backend API
+- Add authentication for secretary/admin access
+- Add a real room availability system and reservation database
+- Add real payment flow for GCash and QR payments
+- Add reporting/dashboard analytics for bookings and clinic volume

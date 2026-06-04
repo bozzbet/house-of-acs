@@ -3,38 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pension House & Medical Clinic</title>
-  <meta name="description" content="Integrated pension house website and Doctor's clinic appointment system." />
+  <title>ACS Pension House + Dr. Allan Dideles Medical Clinic</title>
+  <meta name="description" content="ACS Pension House and Dr. Allan Dideles Medical Clinic: room inquiries, clinic appointment scheduling, QR access, announcements, payment options, and contact details." />
   <link rel="icon" type="image/jpeg" href="assets/images/acs%20logo.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600;1,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 
 <body>
-  <header>
+  <header class="site-header">
     <div class="container navbar">
-      <a class="brand" href="#home">
-        <span class="brand-logo">
-          <span>PH</span>
-        </span>
-        <span class="brand-text">
-          <span class="brand-main">
-            <span class="brand-acs">ACS</span>
-            <span class="brand-house">Pension House</span>
-          </span>
-          <span class="brand-divider"></span>
-          <span class="brand-clinic">Dr. Allan Dideles Medical Clinic</span>
+      <a class="brand" href="#home" aria-label="ACS Pension House and Dr. Allan Dideles Medical Clinic home">
+        <img class="brand-mark" src="assets/images/acs%20logo.jpg" alt="" />
+        <span class="brand-copy">
+          <strong>ACS Pension House</strong>
+          <span>Dr. Allan Dideles Medical Clinic</span>
         </span>
       </a>
 
-      <button class="menu-toggle" id="menuToggle" type="button">☰</button>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation">Menu</button>
 
-      <nav id="siteNav">
+      <nav id="siteNav" aria-label="Primary navigation">
         <ul>
           <li><a href="#rooms">Rooms</a></li>
-          <li><a href="#amenities">Amenities</a></li>
+          <li><a href="#booking">Booking</a></li>
           <li><a href="#clinic">Clinic</a></li>
           <li><a href="#announcements">Updates</a></li>
           <li><a href="#location">Location</a></li>
@@ -46,233 +40,231 @@
 
   <main id="home">
     <section class="hero">
-      <div class="container hero-grid">
-        <div>
-          <div class="eyebrow">Comfortable Stay • Convenient Clinic Access</div>
-           <h1><span class="warm-script hero-accent">Exceptional Comfort </span> and <span class="warm-script hero-accent">Distinguished Care</span> In One <span class="warm-script hero-accent">Trusted</span> Place.</h1>
+      <div class="container hero-layout">
+        <div class="hero-copy">
+          <p class="eyebrow">Integrated stay and clinic access in Koronadal City</p>
+          <h1>ACS Pension House + Dr. Allan Dideles Medical Clinic</h1>
           <p>
-            Enjoy a seamless experience, whether you’re booking a quiet and comfortable stay or visiting the clinic.  
-            We ensure every visit feels smooth and supported.  Book your stay or secure your appointment 
-            ahead of time with our QR code.
+            A practical first stop for guests, patients, and families: check room options,
+            send a booking inquiry, scan for a clinic appointment, and review payment next steps.
           </p>
-
           <div class="hero-actions">
-            <a class="btn btn-secondary" href="#booking">Book a Room</a>
-            <a class="btn btn-primary" href="#appointment">Set Clinic Appointment</a>
-            <a class="btn btn-outline" href="#location">View Location</a>
+            <a class="btn btn-primary" href="#booking">Book a Room</a>
+            <a class="btn btn-secondary" href="#appointment">Set Clinic Appointment</a>
+            <a class="btn btn-outline" href="admin.html">Secretary Demo</a>
           </div>
         </div>
 
-        <div class="hero-card">
-          <div class="hero-card-top"></div>
-          <div class="quick-card-grid">
-            <div class="quick-card">
-              <strong>ACS Pension House</strong>
-              <span>Clean rooms, amenities, and booking inquiries.</span>
-            </div>
-            <div class="quick-card">
-              <strong>Dr. Allan Dideles Medical Clinic</strong>
-              <span>QR Appointment Scheduling and Secretary Dashboard.</span>
-            </div>
+        <div class="hero-media" aria-label="ACS Pension House room and office preview">
+          <img class="hero-photo hero-photo-main" src="assets/images/acs-office.jpg" alt="ACS Pension House office area" />
+          <img class="hero-photo hero-photo-room" src="assets/images/acs-room.jpg" alt="ACS Pension House guest room" />
+          <div class="availability-card">
+            <span>Demo Availability</span>
+            <strong>Rooms and clinic slots are inquiry-based in this static version.</strong>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section class="journey-band">
+      <div class="container journey-grid">
+        <article class="journey">
+          <span class="journey-number">01</span>
+          <h2>Pension House Guests</h2>
+          <p>Review sample rooms, choose dates, submit an inquiry, then coordinate QR or GCash payment with staff.</p>
+          <a href="#booking">Start room inquiry</a>
+        </article>
+        <article class="journey">
+          <span class="journey-number">02</span>
+          <h2>Clinic Patients</h2>
+          <p>Scan the appointment QR, choose a future slot, add patient details, and receive a demo confirmation.</p>
+          <a href="#appointment">Reserve clinic slot</a>
+        </article>
+        <article class="journey">
+          <span class="journey-number">03</span>
+          <h2>Secretary Dashboard</h2>
+          <p>View local demo appointments, filter by date or status, update status, export CSV, and print reports.</p>
+          <a href="admin.html">Open dashboard</a>
+        </article>
       </div>
     </section>
 
     <section id="rooms">
       <div class="container">
         <div class="section-heading">
-          <div class="section-label">Pension House</div>
-          <h2>A Place to <span class="warm-script">rest, feel</span> at home.</h2>
-          <p>Simple, warm, and comfortable accomodations designed for travelers who value quiet comfort over
-            excess.  Your Home away from Home.
-          </p>
+          <p class="section-label">Pension House Rooms</p>
+          <h2>Clean rooms for short stays, family visits, and clinic-related travel.</h2>
+          <p>Sample rates and availability notes are placeholders for version 1. Replace them with final ACS room data when ready.</p>
         </div>
 
-        <div class="grid-3">
-          <article class="card">
-            <div class="room-image room-1"></div>
-            <div class="card-body">
+        <div class="room-grid">
+          <article class="room-card">
+            <img src="assets/images/acs-room.jpg" alt="Standard room at ACS Pension House" />
+            <div>
               <h3>Standard Room</h3>
-              <p>Good for solo guests, family, or group visits. Includes basic amenities and private bathroom.</p>
-              <div class="price">Sample Rate: ₱300/night</div>
-              <a class="btn btn-outline" href="#booking">Inquire Now</a>
+              <p>Simple private room for solo guests, short trips, and practical overnight stays.</p>
+              <strong>Sample Rate: PHP 300/night</strong>
+              <a class="text-link" href="#booking">Inquire about this room</a>
             </div>
           </article>
-
-          <article class="card">
-            <div class="room-image room-2"></div>
-            <div class="card-body">
+          <article class="room-card">
+            <img src="assets/images/acs-room2.jpg" alt="Family room at ACS Pension House" />
+            <div>
               <h3>Family Room</h3>
-              <p>Comfortable space for small families or group guests visiting the area.</p>
-              <div class="price">Sample Rate: ₱600/night</div>
-              <a class="btn btn-outline" href="#booking">Inquire Now</a>
+              <p>More room for families and small groups who need a convenient home base.</p>
+              <strong>Sample Rate: PHP 600/night</strong>
+              <a class="text-link" href="#booking">Inquire about this room</a>
             </div>
           </article>
-
-          <article class="card">
-            <div class="room-image room-3"></div>
-            <div class="card-body">
+          <article class="room-card">
+            <img src="assets/images/acs-room3.jpg" alt="Deluxe room at ACS Pension House" />
+            <div>
               <h3>Deluxe Room</h3>
-              <p>Extra comfort with upgraded room features for longer or special stays.</p>
-              <div class="price">Sample Rate: ₱500/night</div>
-              <a class="btn btn-outline" href="#booking">Inquire Now</a>
+              <p>Extra comfort for longer visits, patients with companions, or special stays.</p>
+              <strong>Sample Rate: PHP 500/night</strong>
+              <a class="text-link" href="#booking">Inquire about this room</a>
             </div>
           </article>
         </div>
       </div>
     </section>
 
-    <section id="amenities" class="white-section">
-      <div class="container">
-        <div class="section-heading center">
-          <div class="section-label">Amenities</div>
-          <h2>Designed for comfort and convenience.</h2>
-          <p>Use this section to list all pension house facilities and useful clinic-related conveniences.</p>
-        </div>
-
-        <div class="grid-3">
-          <div class="card amenity"><div class="icon">📶</div><div><h3>Wi-Fi Access</h3><p>Reliable internet access for guests and visitors.</p></div></div>
-          <div class="card amenity"><div class="icon">🚗</div><div><h3>Parking Area</h3><p>Convenient parking space for guests and patients.</p></div></div>
-          <div class="card amenity"><div class="icon">❄️</div><div><h3>Air-Conditioned Rooms</h3><p>Comfortable rooms for restful overnight stays.</p></div></div>
-          <div class="card amenity"><div class="icon">🛁</div><div><h3>Private Bathroom</h3><p>Clean private facilities for each room type.</p></div></div>
-          <div class="card amenity"><div class="icon">🩺</div><div><h3>Clinic Nearby</h3><p>Patients can stay close before or after appointments.</p></div></div>
-          <div class="card amenity"><div class="icon">🛡️</div><div><h3>Safe Environment</h3><p>Add security, CCTV, or staff availability details here.</p></div></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="clinic" class="clinic-band">
-      <div class="container clinic-panel">
+    <section class="split-section" id="booking">
+      <div class="container split-grid">
         <div>
-          <div class="section-label">Dr. Allan Dideles Medical Clinic</div>
-          <h2>Patients can reserve a clinic time slot by scanning a QR code.</h2>
-          <p>
-            The QR code should point to the online appointment page. Patients can choose a future date,
-            select an available slot, enter their information, and receive a confirmation.
-          </p>
+          <p class="section-label">Room Booking Inquiry</p>
+          <h2>Send stay details and receive next steps for confirmation.</h2>
+          <p class="section-copy">This demo saves booking inquiries in this browser only. A production version needs a secure backend and real room availability system.</p>
 
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="#appointment">Open Appointment Form</a>
-            <a class="btn btn-outline" href="admin.html">Secretary Dashboard Demo</a>
+          <div class="feature-list">
+            <div><strong>Availability</strong><span>Inquiry-based sample messaging for version 1.</span></div>
+            <div><strong>Payment</strong><span>Staff can confirm QR or GCash instructions after review.</span></div>
+            <div><strong>Follow-up</strong><span>Use official contact channels for final confirmation.</span></div>
           </div>
         </div>
 
-        <div class="qr-box">
-          <div class="qr-placeholder"></div>
+        <form id="bookingForm" class="panel-form">
+          <div class="form-row">
+            <div><label for="guestName">Guest Name</label><input id="guestName" type="text" placeholder="Guest full name" required /></div>
+            <div><label for="guestContact">Contact Number</label><input id="guestContact" type="tel" placeholder="0917 123 4567" required /></div>
+          </div>
+          <div class="form-row">
+            <div><label for="checkIn">Check-in</label><input id="checkIn" type="date" required /></div>
+            <div><label for="checkOut">Check-out</label><input id="checkOut" type="date" required /></div>
+          </div>
+          <div class="form-row">
+            <div><label for="guests">Guests</label><input id="guests" type="number" min="1" placeholder="2" /></div>
+            <div><label for="roomType">Preferred Room</label><select id="roomType"><option>Standard Room</option><option>Family Room</option><option>Deluxe Room</option></select></div>
+          </div>
+          <div><label for="bookingMessage">Message</label><textarea id="bookingMessage" placeholder="Arrival time, special request, parking request..."></textarea></div>
+          <button class="btn btn-primary" type="submit">Send Booking Inquiry</button>
+          <p id="bookingMessageOutput" class="form-message" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <section id="clinic" class="clinic-section">
+      <div class="container clinic-layout">
+        <div>
+          <p class="section-label">Dr. Allan Dideles Medical Clinic</p>
+          <h2>QR-first appointment booking for patients and staff coordination.</h2>
+          <p>
+            The public page gives patients a direct appointment workflow while the secretary demo
+            shows how appointment records can be reviewed and updated. In production, this must move
+            from localStorage to a secure backend API.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-secondary" href="#appointment">Open Appointment Form</a>
+            <a class="btn btn-outline btn-on-dark" href="admin.html">View Secretary Dashboard</a>
+          </div>
+        </div>
+
+        <div class="qr-card">
+          <div class="qr-placeholder" aria-hidden="true"></div>
           <h3>Scan to Set Appointment</h3>
-          <p class="small-note">Replace this placeholder with a real QR code linking to this page or `/clinic/appointment`.</p>
+          <p>Replace this generated placeholder with a real QR code pointing to the appointment section.</p>
         </div>
       </div>
     </section>
 
     <section id="appointment">
-      <div class="container grid-2">
+      <div class="container appointment-grid">
         <div>
-          <div class="section-heading">
-            <div class="section-label">Appointment Form</div>
-            <h2>Clinic Appointment Reservation sample.</h2>
-            <p>
-              GitHub Pages is static, so this demo stores appointments in the visitor's browser using localStorage.
-              Later, connect this form to a backend API that writes to `data/appointments.json` or a database.
-            </p>
+          <div class="section-heading compact">
+            <p class="section-label">Appointment Form</p>
+            <h2>Choose a future date and clinic time slot.</h2>
+            <p>This demo stores appointments in the visitor browser so the admin page can preview the workflow.</p>
           </div>
 
-          <div class="form-wrap">
-            <form id="appointmentForm">
-              <div class="form-row">
-                <div>
-                  <label for="patientName">Patient Name</label>
-                  <input id="patientName" name="patientName" type="text" placeholder="Juan Dela Cruz" required />
-                </div>
-                <div>
-                  <label for="contactNumber">Contact Number</label>
-                  <input id="contactNumber" name="contactNumber" type="tel" placeholder="0917 123 4567" required />
-                </div>
-              </div>
-
-              <div class="form-row">
-                <div>
-                  <label for="appointmentDate">Appointment Date</label>
-                  <input id="appointmentDate" name="appointmentDate" type="date" required />
-                </div>
-                <div>
-                  <label for="appointmentTime">Time Slot</label>
-                  <select id="appointmentTime" name="appointmentTime" required>
-                    <option value="">Select time</option>
-                    <option>08:00 AM</option><option>08:30 AM</option><option>09:00 AM</option><option>09:30 AM</option>
-                    <option>10:00 AM</option><option>10:30 AM</option><option>11:00 AM</option><option>11:30 AM</option>
-                    <option>01:00 PM</option><option>01:30 PM</option><option>02:00 PM</option><option>02:30 PM</option>
-                    <option>03:00 PM</option><option>03:30 PM</option><option>04:00 PM</option><option>04:30 PM</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-row">
-                <div>
-                  <label for="age">Age</label>
-                  <input id="age" name="age" type="number" min="0" placeholder="35" />
-                </div>
-                <div>
-                  <label for="patientType">Patient Type</label>
-                  <select id="patientType" name="patientType">
-                    <option>New Patient</option>
-                    <option>Returning Patient</option>
-                  </select>
-                </div>
-              </div>
-
+          <form id="appointmentForm" class="panel-form">
+            <div class="form-row">
+              <div><label for="patientName">Patient Name</label><input id="patientName" name="patientName" type="text" placeholder="Juan Dela Cruz" required /></div>
+              <div><label for="contactNumber">Contact Number</label><input id="contactNumber" name="contactNumber" type="tel" placeholder="0917 123 4567" required /></div>
+            </div>
+            <div class="form-row">
+              <div><label for="appointmentDate">Appointment Date</label><input id="appointmentDate" name="appointmentDate" type="date" required /></div>
               <div>
-                <label for="reason">Reason for Visit</label>
-                <textarea id="reason" name="reason" placeholder="Example: Check-up, follow-up, consultation..."></textarea>
+                <label for="appointmentTime">Time Slot</label>
+                <select id="appointmentTime" name="appointmentTime" required>
+                  <option value="">Select time</option>
+                  <option>08:00 AM</option><option>08:30 AM</option><option>09:00 AM</option><option>09:30 AM</option>
+                  <option>10:00 AM</option><option>10:30 AM</option><option>11:00 AM</option><option>11:30 AM</option>
+                  <option>01:00 PM</option><option>01:30 PM</option><option>02:00 PM</option><option>02:30 PM</option>
+                  <option>03:00 PM</option><option>03:30 PM</option><option>04:00 PM</option><option>04:30 PM</option>
+                </select>
               </div>
-
-              <button class="btn btn-primary" type="submit">Submit Appointment</button>
-              <p id="appointmentMessage" class="small-note"></p>
-            </form>
-          </div>
+            </div>
+            <div class="form-row">
+              <div><label for="age">Age</label><input id="age" name="age" type="number" min="0" placeholder="35" /></div>
+              <div><label for="patientType">Patient Type</label><select id="patientType" name="patientType"><option>New Patient</option><option>Returning Patient</option></select></div>
+            </div>
+            <div><label for="reason">Reason for Visit</label><textarea id="reason" name="reason" placeholder="Check-up, follow-up, consultation..."></textarea></div>
+            <button class="btn btn-secondary" type="submit">Submit Appointment</button>
+            <p id="appointmentMessage" class="form-message" aria-live="polite"></p>
+          </form>
         </div>
 
-        <div class="appointments-preview">
-          <div class="appointments-preview-header">
+        <aside class="preview-panel">
+          <div class="preview-header">
             <div>
-              <h3>Appointment Preview</h3>
-              <p>Submitted demo appointments appear here and in the admin demo.</p>
+              <p class="section-label">Preview</p>
+              <h3>Recent demo appointments</h3>
             </div>
             <a class="btn btn-outline" href="admin.html">Open Admin</a>
           </div>
-
-          <table>
-            <thead>
-              <tr><th>Time</th><th>Patient</th><th>Reason</th><th>Status</th></tr>
-            </thead>
-            <tbody id="appointmentTable"></tbody>
-          </table>
-        </div>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>Time</th><th>Patient</th><th>Reason</th><th>Status</th></tr></thead>
+              <tbody id="appointmentTable"></tbody>
+            </table>
+          </div>
+        </aside>
       </div>
     </section>
 
-    <section id="announcements" class="white-section">
+    <section id="announcements" class="soft-section">
       <div class="container">
         <div class="section-heading">
-          <div class="section-label">Announcements / Updates</div>
-          <h2>Latest pension house and clinic notices.</h2>
-          <p>Secretary or admin can post clinic schedules, room promos, holiday notices, doctor availability, and general updates.</p>
+          <p class="section-label">Announcements / Updates</p>
+          <h2>Clinic schedules, room notices, promos, and holiday advisories.</h2>
         </div>
-
-        <div class="grid-3" id="announcementCards"></div>
+        <div class="announcement-grid" id="announcementCards"></div>
       </div>
     </section>
 
     <section id="location">
-      <div class="container">
-        <div class="section-heading center">
-          <div class="section-label">Location</div>
-          <h2>Find us easily.</h2>
-          <p>Visit ACS Pension House in Koronadal City, South Cotabato.</p>
+      <div class="container location-grid">
+        <div>
+          <p class="section-label">Location & Contact</p>
+          <h2>Visit ACS Pension House in Koronadal City.</h2>
+          <p class="section-copy">Rizal Street, Zone I, Koronadal City, South Cotabato, Philippines, 9506</p>
+          <div class="contact-cards">
+            <div><strong>Pension House</strong><span>Phone: 0917 000 0000</span><span>Email: pension@example.com</span><span>Office Hours: 8:00 AM - 8:00 PM</span></div>
+            <div><strong>Medical Clinic</strong><span>Phone: 0918 000 0000</span><span>Clinic Hours: Monday to Saturday, 8:00 AM - 5:00 PM</span></div>
+            <div><strong>Payment Options</strong><span>QR payment and GCash details should be confirmed by staff before sending payment.</span></div>
+          </div>
         </div>
-
-        <div class="location-box">
+        <div class="map-frame">
           <iframe
             class="google-map"
             title="ACS Pension House location map"
@@ -282,67 +274,14 @@
             allowfullscreen>
           </iframe>
         </div>
-
-        <div class="location-details">
-          <p><strong>ACS Pension House</strong>, Rizal Street, Zone I, Koronadal City, South Cotabato, Philippines, 9506</p>
-          <a class="btn btn-primary" href="#contact">Contact Us</a>
-        </div>
-      </div>
-    </section>
-
-    <section id="booking" class="contact-section">
-      <div class="container grid-2">
-        <div>
-          <div class="section-heading">
-            <div class="section-label">Pension House Booking</div>
-            <h2>Room booking inquiry sample.</h2>
-            <p>For version 1, guests can submit a booking inquiry. Later this can become a full room reservation system.</p>
-          </div>
-
-          <div class="form-wrap">
-            <form id="bookingForm">
-              <div class="form-row">
-                <div><label for="guestName">Guest Name</label><input id="guestName" type="text" placeholder="Guest full name" required /></div>
-                <div><label for="guestContact">Contact Number</label><input id="guestContact" type="tel" placeholder="Contact number" required /></div>
-              </div>
-
-              <div class="form-row">
-                <div><label for="checkIn">Check-in</label><input id="checkIn" type="date" required /></div>
-                <div><label for="checkOut">Check-out</label><input id="checkOut" type="date" required /></div>
-              </div>
-
-              <div class="form-row">
-                <div><label for="guests">Number of Guests</label><input id="guests" type="number" min="1" placeholder="2" /></div>
-                <div><label for="roomType">Preferred Room</label><select id="roomType"><option>Standard Room</option><option>Family Room</option><option>Deluxe Room</option></select></div>
-              </div>
-
-              <div><label for="bookingMessage">Message</label><textarea id="bookingMessage" placeholder="Special request, arrival time, parking request..."></textarea></div>
-
-              <button class="btn btn-secondary" type="submit">Send Booking Inquiry</button>
-              <p id="bookingMessageOutput" class="small-note"></p>
-            </form>
-          </div>
-        </div>
-
-        <div id="contact">
-          <div class="section-heading">
-            <div class="section-label">Contact</div>
-            <h2>Contact and business information.</h2>
-            <p>Add your official phone number, Facebook page, email, address, and clinic hours here.</p>
-          </div>
-
-          <div class="card"><div class="card-body"><h3>Pension House</h3><p>Phone: 0917 000 0000</p><p>Email: pension@example.com</p><p>Office Hours: 8:00 AM - 8:00 PM</p></div></div>
-          <br />
-          <div class="card"><div class="card-body"><h3>Medical Clinic</h3><p>Phone: 0918 000 0000</p><p>Clinic Hours: Monday to Saturday, 8:00 AM - 5:00 PM</p><p>Appointment Page: this website's appointment section</p></div></div>
-        </div>
       </div>
     </section>
   </main>
 
   <footer>
     <div class="container footer-grid">
-      <div><strong>Pension House + Medical Clinic</strong><p>Integrated lodging and clinic appointment website.</p></div>
-      <div><p>© 2026 Your Business Name. All rights reserved.</p></div>
+      <div><strong>ACS Pension House + Dr. Allan Dideles Medical Clinic</strong><p>Static GitHub Pages demo for lodging inquiries and clinic appointments.</p></div>
+      <a href="#home">Back to top</a>
     </div>
   </footer>
 

@@ -8,6 +8,23 @@ function saveAppointments(appointments) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(appointments, null, 2));
 }
 
+function escapeHtml(value) {
+  return String(value || "").replace(/[&<>"']/g, (character) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  })[character]);
+}
+
+function getLocalDateString(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 function renderAdminTable() {
   const table = document.getElementById("adminAppointmentTable");
   const filterDate = document.getElementById("filterDate").value;
@@ -35,12 +52,12 @@ function renderAdminTable() {
 
   table.innerHTML = appointments.map((appointment) => `
     <tr>
-      <td>${appointment.date}</td>
-      <td>${appointment.time}</td>
-      <td>${appointment.patient.name}</td>
-      <td>${appointment.patient.contactNumber || ""}</td>
-      <td>${appointment.reasonForVisit || ""}</td>
-      <td><span class="status ${appointment.status}">${appointment.status}</span></td>
+      <td>${escapeHtml(appointment.date)}</td>
+      <td>${escapeHtml(appointment.time)}</td>
+      <td>${escapeHtml(appointment.patient?.name)}</td>
+      <td>${escapeHtml(appointment.patient?.contactNumber)}</td>
+      <td>${escapeHtml(appointment.reasonForVisit)}</td>
+      <td><span class="status ${escapeHtml(appointment.status)}">${escapeHtml(appointment.status)}</span></td>
       <td>
         <select data-id="${appointment.id}" class="status-select">
           ${["confirmed", "pending", "completed", "cancelled", "no-show"].map(status =>
@@ -92,7 +109,7 @@ function exportCsv() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const today = new Date().toISOString().split("T")[0];
+  const today = getLocalDateString();
   document.getElementById("filterDate").value = today;
 
   ["filterDate", "filterStatus", "searchText"].forEach((id) => {
