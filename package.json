@@ -1,0 +1,13 @@
+{
+  "name": "house-of-acs",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ACS Pension House and Dr. Allan Dideles Medical Clinic website with a small appointment backend.",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

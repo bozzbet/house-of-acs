@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Room Booking Inquiry | ACS Pension House</title>
+  <meta name="description" content="Send a room booking inquiry for ACS Pension House." />
+  <link rel="icon" type="image/jpeg" href="assets/images/acs%20logo.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+
+<body class="booking-page">
+  <header class="site-header">
+    <div class="container navbar">
+      <a class="brand" href="index.html">
+        <img class="brand-mark" src="assets/images/acs%20logo.jpg" alt="" />
+        <span class="brand-copy">
+          <strong>ACS Pension House</strong>
+          <span>Room Booking Inquiry</span>
+        </span>
+      </a>
+      <nav aria-label="Booking navigation">
+        <ul>
+          <li><a href="index.html"><span class="ui-icon" aria-hidden="true">⌂</span>HomePage</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="split-section" id="booking">
+      <div class="container split-grid">
+        <div>
+          <p class="section-label">Room Booking Inquiry</p>
+          <h1>Send stay details and receive next steps for confirmation.</h1>
+          <p class="section-copy">Extra bed fee is ₱450.00. Submit your preferred room and stay dates so staff can confirm availability and payment instructions.</p>
+
+          <div class="feature-list">
+            <div><strong>Comfort</strong><span>Fully air-conditioned rooms for a more comfortable stay.</span></div>
+            <div><strong>Connectivity</strong><span>Free high-speed Wi-Fi connection for guests.</span></div>
+            <div><strong>Entertainment</strong><span>LED TVs equipped with Netflix access.</span></div>
+            <div><strong>Assistance</strong><span>24-hour reception desk to assist you anytime.</span></div>
+            <div><strong>Security</strong><span>24/7 security monitoring with CCTV cameras.</span></div>
+          </div>
+        </div>
+
+        <form id="bookingForm" class="panel-form">
+          <div class="form-row">
+            <div><label for="guestName">Guest Name</label><input id="guestName" type="text" placeholder="Guest full name" required /></div>
+            <div>
+              <label for="guestContact">Contact Number</label>
+              <div class="phone-fields">
+                <input id="guestCountryCode" type="tel" value="+63" aria-label="Country code" pattern="^\+\d{1,4}$" required />
+                <input id="guestContact" type="tel" placeholder="0917-123-4567" pattern="^\d{4}-\d{3}-\d{4}$" title="Use format: 0917-123-4567" required />
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div><label for="checkIn">Check-in</label><input id="checkIn" type="text" placeholder="MM/DD/YYYY" inputmode="numeric" required /></div>
+            <div><label for="checkOut">Check-out</label><input id="checkOut" type="text" placeholder="MM/DD/YYYY" inputmode="numeric" required /></div>
+          </div>
+          <div class="form-row">
+            <div><label for="guests">Guests</label><input id="guests" type="number" min="1" placeholder="2" /></div>
+            <div><label for="roomType">Preferred Room</label><select id="roomType"><option>Small Room</option><option>Matrimonial Bed Room</option><option>Twin Room</option><option>Family Room</option><option>Group Room</option><option>Extra Bed</option></select></div>
+          </div>
+          <div><label for="bookingMessage">Message</label><textarea id="bookingMessage" placeholder="Arrival time, special request, parking request..."></textarea></div>
+          <button class="btn btn-primary" type="submit"><span class="ui-icon" aria-hidden="true">◇</span>Send Booking Inquiry</button>
+          <p id="bookingMessageOutput" class="form-message" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

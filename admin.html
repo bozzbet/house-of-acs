@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Secretary Dashboard Demo | ACS Clinic</title>
+  <title>Secretary Dashboard | Dr. Allan Dideles Medical Clinic</title>
   <link rel="icon" type="image/jpeg" href="assets/images/acs%20logo.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -22,57 +22,125 @@
       </a>
       <nav aria-label="Admin navigation">
         <ul>
-          <li><a href="index.html">Public Website</a></li>
-          <li><button class="nav-cta button-link" id="printBtn" type="button">Print Report</button></li>
+          <li><a href="index.html"><span class="ui-icon" aria-hidden="true">⌂</span>HomePage</a></li>
+          <li><button class="button-link secondary-link" id="logoutBtn" type="button" hidden><span class="ui-icon" aria-hidden="true">↩</span>Logout</button></li>
+          <li><button class="nav-cta button-link" id="printBtn" type="button" hidden><span class="ui-icon" aria-hidden="true">▣</span>Print Report</button></li>
         </ul>
       </nav>
     </div>
   </header>
 
   <main>
-    <section class="admin-hero">
-      <div class="container admin-hero-grid">
+    <section class="login-section" id="loginSection">
+      <div class="container login-grid">
         <div>
-          <p class="section-label">Admin Demo</p>
-          <h1>Clinic appointments workspace</h1>
-          <p>Filter local demo appointments, update status, export CSV, and print a report. Production use requires login, a backend API, and secure patient data storage.</p>
+          <p class="section-label">Secretary Login</p>
+          <h1>Secure Clinic Dashboard Access</h1>
+          <p>Sign in to view appointments, change status, export records, and review clinic volume reports.</p>
         </div>
-        <div class="admin-note">
-          <strong>Browser-only data</strong>
-          <span>Appointments shown here come from this device's localStorage.</span>
-        </div>
+        <form class="panel-form login-form" id="loginForm">
+          <div>
+            <label for="adminUsername">Username</label>
+            <input id="adminUsername" type="text" autocomplete="username" placeholder="secretary" required />
+          </div>
+          <div>
+            <label for="adminPassword">Password</label>
+            <input id="adminPassword" type="password" autocomplete="current-password" required />
+          </div>
+          <button class="btn btn-primary" type="submit"><span class="ui-icon" aria-hidden="true">↪</span>Login</button>
+          <p class="form-message" id="adminLoginMessage" aria-live="polite"></p>
+        </form>
       </div>
     </section>
 
-    <section class="admin-workspace">
+    <div id="adminShell" hidden>
+      <section class="admin-hero">
+      <div class="container admin-hero-grid">
+        <div>
+          <p class="section-label">Admin Dashboard</p>
+          <h1>Clinic Appointments Workspace</h1>
+          <p>Filter appointments, update status, export CSV, print reports, and review daily appointment volume.</p>
+        </div>
+        <div class="admin-note">
+          <strong>Signed in as <span id="adminUser">secretary</span></strong>
+          <span>Records are loaded from the server-side clinic appointment database.</span>
+        </div>
+      </div>
+      </section>
+
+      <section class="admin-workspace">
       <div class="container">
+        <div class="analytics-grid" aria-label="Clinic Appointment Analytics">
+          <article class="metric-card"><span>Total Appointments</span><strong id="totalAppointments">0</strong></article>
+          <article class="metric-card"><span>Today</span><strong id="todayAppointments">0</strong></article>
+          <article class="metric-card"><span>Upcoming 7 Days</span><strong id="upcomingAppointments">0</strong></article>
+          <article class="metric-card"><span>Completed This Month</span><strong id="completedMonth">0</strong></article>
+          <article class="metric-card"><span>Cancelled</span><strong id="cancelledAppointments">0</strong></article>
+          <article class="metric-card"><span>No Show</span><strong id="noShowAppointments">0</strong></article>
+        </div>
+
+        <div class="report-grid">
+          <article class="report-card">
+            <div class="preview-header">
+              <div>
+                <p class="section-label">Status</p>
+                <h2>Status Breakdown</h2>
+              </div>
+            </div>
+            <div class="chart-list" id="statusBreakdown"></div>
+          </article>
+          <article class="report-card">
+            <div class="preview-header">
+              <div>
+                <p class="section-label">Patient Type</p>
+                <h2>Patient Mix</h2>
+              </div>
+            </div>
+            <div class="chart-list" id="patientTypeBreakdown"></div>
+          </article>
+          <article class="report-card wide-report">
+            <div class="preview-header">
+              <div>
+                <p class="section-label">Daily Volume</p>
+                <h2>Recent Appointment Counts</h2>
+              </div>
+            </div>
+            <div class="chart-list daily-chart" id="dailyVolume"></div>
+          </article>
+        </div>
+
         <div class="admin-toolbar">
-          <div><label for="filterDate">Date</label><input id="filterDate" type="date" /></div>
-          <div><label for="filterStatus">Status</label><select id="filterStatus"><option value="">All Statuses</option><option>confirmed</option><option>pending</option><option>completed</option><option>cancelled</option><option>no-show</option></select></div>
+          <div><label for="filterDate">Date</label><input id="filterDate" type="text" placeholder="MM/DD/YYYY" inputmode="numeric" /></div>
+          <div><label for="filterMonth">Month</label><select id="filterMonth"></select></div>
+          <div><label for="filterYear">Year</label><select id="filterYear"></select></div>
+          <div><label for="filterStatus">Status</label><select id="filterStatus"><option value="">All Statuses</option><option>confirmed</option><option>completed</option><option>cancelled</option><option>no-show</option></select></div>
           <div><label for="searchText">Search</label><input id="searchText" type="search" placeholder="Name or contact" /></div>
-          <button class="btn btn-primary" id="exportCsvBtn" type="button">Export CSV</button>
+          <button class="btn btn-outline" id="clearFiltersBtn" type="button"><span class="ui-icon" aria-hidden="true">×</span>Clear Filters</button>
+          <button class="btn btn-primary" id="exportCsvBtn" type="button"><span class="ui-icon" aria-hidden="true">⇩</span>Export CSV</button>
         </div>
 
         <div class="admin-table-panel">
           <div class="preview-header">
             <div>
               <p class="section-label">Queue</p>
-              <h2>Appointment records</h2>
+              <h2>Appointment Records</h2>
             </div>
+            <button class="button-link danger-link" id="bulkDeleteBtn" type="button" disabled><span class="ui-icon" aria-hidden="true">−</span>Delete Selected</button>
           </div>
           <div class="table-scroll">
             <table>
               <thead>
-                <tr><th>Date</th><th>Time</th><th>Patient</th><th>Contact</th><th>Reason</th><th>Status</th><th>Update</th></tr>
+                <tr><th><input id="selectAllRecords" type="checkbox" aria-label="Select all records" /></th><th>Date</th><th>Time</th><th>Patient</th><th>Contact</th><th>Reason</th><th>Status</th><th>Update</th><th>Actions</th></tr>
               </thead>
               <tbody id="adminAppointmentTable"></tbody>
             </table>
           </div>
         </div>
 
-        <p class="form-message">Note: GitHub Pages cannot be used as a private patient database. This page is a workflow demo only.</p>
+        <p class="form-message">File-based storage is suitable for this first server prototype. Use SQLite or PostgreSQL before production clinic use.</p>
       </div>
-    </section>
+      </section>
+    </div>
   </main>
 
   <script src="assets/js/admin.js"></script>

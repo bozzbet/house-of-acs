@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clinic Appointment | ACS</title>
+  <meta name="description" content="Set a clinic appointment for Dr. Allan Dideles Medical Clinic." />
+  <link rel="icon" type="image/jpeg" href="assets/images/acs%20logo.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+
+<body class="appointment-page">
+  <header class="site-header">
+    <div class="container navbar">
+      <a class="brand" href="index.html">
+        <img class="brand-mark" src="assets/images/acs%20logo.jpg" alt="" />
+        <span class="brand-copy">
+          <strong>ACS Pension House</strong>
+          <span>Dr. Allan Dideles Medical Clinic</span>
+        </span>
+      </a>
+      <nav aria-label="Appointment navigation">
+        <ul>
+          <li><a href="index.html"><span class="ui-icon" aria-hidden="true">⌂</span>HomePage</a></li>
+          <li><a class="nav-cta" href="admin.html"><span class="ui-icon" aria-hidden="true">▤</span>Secretary Dashboard</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="appointment">
+      <div class="container appointment-grid">
+        <div>
+          <div class="section-heading compact">
+            <p class="section-label">Appointment Form</p>
+            <h1>Enter Patient Identification and Contact Information</h1>
+            <p>Patient Name, Appointment Date, Time Slot and Contact number are required fields.</p>
+          </div>
+
+          <form id="appointmentForm" class="panel-form">
+            <div class="form-row form-row-name">
+              <div>
+                <label for="patientPrefix">Prefix</label>
+                <select id="patientPrefix" name="patientPrefix">
+                  <option value="">None</option>
+                  <option>Mr.</option>
+                  <option>Ms.</option>
+                  <option>Mrs.</option>
+                  <option>Dr.</option>
+                </select>
+              </div>
+              <div><label for="firstName">First Name</label><input id="firstName" name="firstName" type="text" placeholder="Juan" required /></div>
+              <div><label for="middleName">Middle Name</label><input id="middleName" name="middleName" type="text" placeholder="Santos" /></div>
+              <div><label for="lastName">Last Name</label><input id="lastName" name="lastName" type="text" placeholder="Dela Cruz" required /></div>
+              <div><label for="suffix">Suffix</label><input id="suffix" name="suffix" type="text" placeholder="Jr." /></div>
+            </div>
+            <div class="form-row form-row-patient-details">
+              <div>
+                <label for="contactNumber">Contact Number</label>
+                <div class="phone-fields">
+                  <input id="patientCountryCode" name="patientCountryCode" type="tel" value="+63" aria-label="Country code" pattern="^\+\d{1,4}$" required />
+                  <input id="contactNumber" name="contactNumber" type="tel" placeholder="0917-123-4567" pattern="^\d{4}-\d{3}-\d{4}$" title="Use format: 0917-123-4567" required />
+                </div>
+              </div>
+              <div><label for="age">Age</label><input id="age" name="age" type="number" min="0" placeholder="35" /></div>
+              <div><label for="patientType">Patient Type</label><select id="patientType" name="patientType"><option>New Patient</option><option>Returning Patient</option></select></div>
+              <div><label for="appointmentDate">Appointment Date</label><input id="appointmentDate" name="appointmentDate" type="text" placeholder="MM/DD/YYYY" inputmode="numeric" required /></div>
+              <div>
+                <label for="appointmentTime">Time Slot</label>
+                <select id="appointmentTime" name="appointmentTime" required>
+                  <option value="">Select time</option>
+                  <option>08:00 AM</option><option>08:30 AM</option><option>09:00 AM</option><option>09:30 AM</option>
+                  <option>10:00 AM</option><option>10:30 AM</option><option>11:00 AM</option><option>11:30 AM</option>
+                  <option>01:00 PM</option><option>01:30 PM</option><option>02:00 PM</option><option>02:30 PM</option>
+                  <option>03:00 PM</option><option>03:30 PM</option><option>04:00 PM</option><option>04:30 PM</option>
+                </select>
+              </div>
+            </div>
+            <div><label for="reason">Reason for Visit</label><textarea id="reason" name="reason" placeholder="Check-up, follow-up, consultation..."></textarea></div>
+            <button class="btn btn-secondary" type="submit"><span class="ui-icon" aria-hidden="true">+</span>Submit Appointment</button>
+            <p id="appointmentMessage" class="form-message" aria-live="polite"></p>
+          </form>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

@@ -13,17 +13,27 @@ This version is designed to work on **GitHub Pages** while you do not have a dom
 - Announcements/updates section
 - Pension house booking inquiry demo
 - Clinic appointment form demo
-- Secretary/admin dashboard demo
-- CSV export demo
+- Secretary/admin authentication for the clinic dashboard
+- Server-side clinic appointment file database
+- Dashboard analytics for clinic appointment volume
+- CSV export
 - Sample JSON data structure
 
 ## Important Limitation
 
-GitHub Pages is static hosting. That means it can serve HTML, CSS, and JavaScript, but it cannot securely save patient appointments to a server-side JSON file by itself.
+GitHub Pages is static hosting. That means it can serve HTML, CSS, and JavaScript, but it cannot run the appointment API, authentication, or server-side database.
 
-For now, this starter uses browser `localStorage` so you can test the appointment flow.
+For the real appointment database and secretary login, run the Node backend in `server.js`.
 
-Later, use one of these backend options:
+This first backend uses a private file database at:
+
+```text
+private-data/clinic-appointments.json
+```
+
+That folder is ignored by Git and should not be uploaded publicly. JSON file storage is acceptable for a first prototype or a single-secretary local deployment. For production clinic use, move to SQLite, PostgreSQL, or MySQL with proper backups.
+
+Backend options for production:
 
 1. Node.js + Express backend on a VPS, Render, Railway, Fly.io, or similar
 2. SQLite database for a simple clinic system
@@ -55,19 +65,32 @@ house-of-acs/
 
 ## Local Development
 
-Open `index.html` directly in your browser.
+You can still open `index.html` directly in your browser for static preview. Appointment submissions will fall back to browser `localStorage`.
 
-Or run a simple local server:
+To use authentication, the appointment database, and reports, run the backend:
 
 ```bash
 cd house-of-acs
-python3 -m http.server 8080
+npm start
 ```
 
 Then open:
 
 ```text
-http://localhost:8080
+http://localhost:3000
+```
+
+Default local secretary login:
+
+```text
+Username: secretary
+Password: change-this-password
+```
+
+Before real use, set a private password:
+
+```bash
+ADMIN_USERNAME=secretary ADMIN_PASSWORD="your-strong-password" npm start
 ```
 
 ## Create GitHub Repo and Push
