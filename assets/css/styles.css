@@ -360,11 +360,25 @@ section { padding: 78px 0; }
 .journey a,
 .text-link {
   display: inline-flex;
+  align-items: center;
+  gap: 6px;
   margin-top: 9px;
   color: var(--teal-dark);
   font-weight: 900;
   text-decoration: underline;
   text-underline-offset: 4px;
+}
+
+.journey a + a {
+  margin-left: 0;
+}
+
+.journey a {
+  width: fit-content;
+}
+
+.journey a:not(:last-child) {
+  margin-right: 12px;
 }
 
 @media (min-width: 961px) {
@@ -1330,6 +1344,29 @@ footer a {
   margin-top: 4px;
   min-height: 0;
   font-size: 0.78rem;
+}
+
+.booking-admin-block {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.booking-admin-block > .preview-header {
+  padding: 6px 10px;
+}
+
+.booking-analytics-grid {
+  margin-bottom: 0;
+}
+
+.booking-toolbar {
+  grid-template-columns: 0.78fr 0.68fr 0.52fr 0.86fr 0.8fr 1fr auto auto;
+}
+
+.muted-cell {
+  color: var(--muted);
+  font-size: 0.68rem;
 }
 
 .admin-toolbar {

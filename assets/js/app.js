@@ -1,4 +1,3 @@
-const BOOKING_KEY = "pensionHouseBookings";
 const APPOINTMENT_TIME_SLOTS = [
   "08:00 AM", "08:30 AM", "09:00 AM", "09:30 AM",
   "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
@@ -141,6 +140,23 @@ async function createAppointmentOnServer(appointment) {
     const error = new Error(data.error || "Appointment API is not available.");
     error.fromServer = isJsonResponse;
     throw error;
+  }
+
+  return response.json();
+}
+
+async function createBookingOnServer(booking) {
+  const response = await fetch("/api/bookings", {
+    method: "POST",
+    cache: "no-store",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(booking)
+  });
+
+  if (!response.ok) {
+    const isJsonResponse = response.headers.get("content-type")?.includes("application/json");
+    const data = isJsonResponse ? await response.json().catch(() => ({})) : {};
+    throw new Error(data.error || "Booking API is not available.");
   }
 
   return response.json();
@@ -363,7 +379,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const bookingForm = document.getElementById("bookingForm");
 
   if (bookingForm) {
-    bookingForm.addEventListener("submit", function (event) {
+    bookingForm.addEventListener("submit", async function (event) {
       event.preventDefault();
 
       const guestName = document.getElementById("guestName").value.trim();
@@ -389,25 +405,25 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const booking = {
-        id: "BOOK-" + Date.now(),
-        createdAt: new Date().toISOString(),
-        status: "new",
-        guest: {
-          name: guestName,
-          contactNumber: guestContact
-        },
+        guestName,
+        phone: guestContact,
         checkIn: checkInDate,
         checkOut: checkOutDate,
-        numberOfGuests: document.getElementById("guests").value,
-        preferredRoom: document.getElementById("roomType").value,
-        message: document.getElementById("bookingMessage").value
+        guests: document.getElementById("guests").value || 1,
+        roomTypeRequested: document.getElementById("roomType").value,
+        specialRequest: document.getElementById("bookingMessage").value
       };
 
-      const bookings = JSON.parse(localStorage.getItem(BOOKING_KEY) || "[]");
-      bookings.push(booking);
-      localStorage.setItem(BOOKING_KEY, JSON.stringify(bookings, null, 2));
+      let savedBooking;
+      try {
+        const data = await createBookingOnServer(booking);
+        savedBooking = data.booking;
+      } catch (error) {
+        setMessage("bookingMessageOutput", error.message, "error");
+        return;
+      }
 
-      setMessage("bookingMessageOutput", `Sample message: Booking inquiry received for ${guestName}. Staff should confirm availability and QR/GCash payment instructions.`, "success");
+      setMessage("bookingMessageOutput", `Booking request #${savedBooking.id} received for ${guestName}. Staff will confirm availability and payment instructions.`, "success");
 
       this.reset();
     });

@@ -2,19 +2,24 @@ const crypto = require("crypto");
 const fs = require("fs");
 const http = require("http");
 const path = require("path");
+const sqlite3 = require("sqlite3").verbose();
 const { URL } = require("url");
 
 const PORT = Number(process.env.PORT || 3000);
 const ROOT_DIR = __dirname;
 const PRIVATE_DIR = path.join(ROOT_DIR, "private-data");
 const APPOINTMENTS_FILE = path.join(PRIVATE_DIR, "clinic-appointments.json");
+const BOOKING_DB_FILE = path.join(PRIVATE_DIR, "pension-booking.db");
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "secretary";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "change-this-password";
 const SESSION_COOKIE = "acs_admin_session";
 const SESSION_TTL_MS = 1000 * 60 * 60 * 8;
 const DEFAULT_APPOINTMENT_STATUS = "confirmed";
+const BOOKING_STATUSES = new Set(["pending", "confirmed", "checked_in", "checked_out", "cancelled", "no_show"]);
+const BOOKING_PAYMENT_STATUSES = new Set(["unpaid", "partial", "paid", "refunded"]);
 
 const sessions = new Map();
+let bookingDb;
 
 const contentTypes = {
   ".css": "text/css; charset=utf-8",
@@ -65,6 +70,115 @@ function writeAppointments(appointments) {
   const tempFile = `${APPOINTMENTS_FILE}.tmp`;
   fs.writeFileSync(tempFile, `${JSON.stringify(appointments, null, 2)}\n`);
   fs.renameSync(tempFile, APPOINTMENTS_FILE);
+}
+
+function runSql(sql, params = []) {
+  return new Promise((resolve, reject) => {
+    bookingDb.run(sql, params, function onRun(error) {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve({ lastID: this.lastID, changes: this.changes });
+    });
+  });
+}
+
+function getSql(sql, params = []) {
+  return new Promise((resolve, reject) => {
+    bookingDb.get(sql, params, (error, row) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(row);
+    });
+  });
+}
+
+function allSql(sql, params = []) {
+  return new Promise((resolve, reject) => {
+    bookingDb.all(sql, params, (error, rows) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(rows);
+    });
+  });
+}
+
+async function initBookingDb() {
+  fs.mkdirSync(PRIVATE_DIR, { recursive: true });
+  bookingDb = new sqlite3.Database(BOOKING_DB_FILE);
+  await runSql("PRAGMA foreign_keys = ON");
+  await runSql(`
+    CREATE TABLE IF NOT EXISTS rooms (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      room_name TEXT NOT NULL,
+      room_type TEXT NOT NULL,
+      capacity INTEGER NOT NULL,
+      price_per_night REAL NOT NULL,
+      status TEXT DEFAULT 'available',
+      description TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+  await runSql(`
+    CREATE TABLE IF NOT EXISTS bookings (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      guest_name TEXT NOT NULL,
+      phone TEXT NOT NULL,
+      email TEXT,
+      room_id INTEGER,
+      room_type_requested TEXT,
+      check_in DATE NOT NULL,
+      check_out DATE NOT NULL,
+      guests INTEGER NOT NULL,
+      special_request TEXT,
+      status TEXT DEFAULT 'pending',
+      payment_status TEXT DEFAULT 'unpaid',
+      total_amount REAL DEFAULT 0,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (room_id) REFERENCES rooms(id)
+    )
+  `);
+  await runSql(`
+    CREATE TABLE IF NOT EXISTS payments (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      booking_id INTEGER NOT NULL,
+      amount REAL NOT NULL,
+      method TEXT NOT NULL,
+      payment_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+      reference_number TEXT,
+      notes TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (booking_id) REFERENCES bookings(id)
+    )
+  `);
+  await seedRooms();
+}
+
+async function seedRooms() {
+  const row = await getSql("SELECT COUNT(*) AS count FROM rooms");
+  if (row.count > 0) return;
+
+  const rooms = [
+    ["Room 101", "Small Room", 2, 1200, "Compact room for short stays."],
+    ["Room 102", "Matrimonial Bed Room", 2, 1500, "Room with matrimonial bed."],
+    ["Room 201", "Twin Room", 2, 1500, "Two-bed room for guests sharing a stay."],
+    ["Room 202", "Family Room", 4, 2200, "Larger room for families."],
+    ["Room 301", "Group Room", 6, 3000, "Room for small groups."]
+  ];
+
+  for (const room of rooms) {
+    await runSql(
+      "INSERT INTO rooms (room_name, room_type, capacity, price_per_night, description) VALUES (?, ?, ?, ?, ?)",
+      room
+    );
+  }
 }
 
 function send(res, status, body, headers = {}) {
@@ -208,6 +322,167 @@ function validateAppointment(input) {
   return "";
 }
 
+function validateBooking(input) {
+  const guestName = normalizeText(input.guestName);
+  const phone = normalizeText(input.phone);
+  const checkIn = normalizeText(input.checkIn);
+  const checkOut = normalizeText(input.checkOut);
+  const guests = Number(input.guests || 1);
+
+  if (!guestName) return "Guest name is required.";
+  if (!phone) return "Contact number is required.";
+  if (!isValidDate(checkIn) || !isValidDate(checkOut)) return "Valid check-in and check-out dates are required.";
+  if (checkIn < toLocalDateString()) return "Check-in must be today or a future date.";
+  if (checkOut <= checkIn) return "Check-out must be after check-in.";
+  if (!Number.isInteger(guests) || guests < 1) return "Guest count must be at least 1.";
+  return "";
+}
+
+function toBookingResponse(row) {
+  if (!row) return null;
+  return {
+    id: row.id,
+    guestName: row.guest_name,
+    phone: row.phone,
+    email: row.email || "",
+    roomId: row.room_id,
+    roomName: row.room_name || "",
+    roomType: row.room_type || "",
+    roomTypeRequested: row.room_type_requested || "",
+    checkIn: row.check_in,
+    checkOut: row.check_out,
+    guests: row.guests,
+    specialRequest: row.special_request || "",
+    status: row.status,
+    paymentStatus: row.payment_status,
+    totalAmount: Number(row.total_amount || 0),
+    createdAt: row.created_at,
+    updatedAt: row.updated_at
+  };
+}
+
+function toRoomResponse(row) {
+  return {
+    id: row.id,
+    roomName: row.room_name,
+    roomType: row.room_type,
+    capacity: row.capacity,
+    pricePerNight: Number(row.price_per_night || 0),
+    status: row.status,
+    description: row.description || ""
+  };
+}
+
+function bookingSelectSql(whereClause = "") {
+  return `
+    SELECT bookings.*, rooms.room_name, rooms.room_type
+    FROM bookings
+    LEFT JOIN rooms ON rooms.id = bookings.room_id
+    ${whereClause}
+  `;
+}
+
+function bookingOrderSql() {
+  return " ORDER BY bookings.check_in ASC, bookings.created_at DESC";
+}
+
+async function getBookingById(id) {
+  const row = await getSql(`${bookingSelectSql("WHERE bookings.id = ?")}`, [id]);
+  return toBookingResponse(row);
+}
+
+async function findRoomConflict(roomId, checkIn, checkOut, excludeBookingId = null) {
+  const params = [roomId, checkOut, checkIn];
+  let excludeSql = "";
+  if (excludeBookingId) {
+    excludeSql = "AND id != ?";
+    params.push(excludeBookingId);
+  }
+  return getSql(`
+    SELECT id, guest_name, check_in, check_out
+    FROM bookings
+    WHERE room_id = ?
+      AND status IN ('pending', 'confirmed', 'checked_in')
+      AND check_in < ?
+      AND check_out > ?
+      ${excludeSql}
+    LIMIT 1
+  `, params);
+}
+
+async function listBookings(searchParams) {
+  const clauses = [];
+  const params = [];
+  const date = searchParams.get("date") || "";
+  const month = searchParams.get("month") || "";
+  const status = searchParams.get("status") || "";
+  const paymentStatus = searchParams.get("paymentStatus") || "";
+  const search = normalizeText(searchParams.get("search")).toLowerCase();
+
+  if (date) {
+    clauses.push("(bookings.check_in = ? OR bookings.check_out = ?)");
+    params.push(date, date);
+  } else if (month) {
+    clauses.push("(bookings.check_in LIKE ? OR bookings.check_out LIKE ?)");
+    params.push(`${month}%`, `${month}%`);
+  }
+  if (status) {
+    clauses.push("bookings.status = ?");
+    params.push(status);
+  }
+  if (paymentStatus) {
+    clauses.push("bookings.payment_status = ?");
+    params.push(paymentStatus);
+  }
+  if (search) {
+    clauses.push("(LOWER(bookings.guest_name) LIKE ? OR LOWER(bookings.phone) LIKE ? OR LOWER(bookings.room_type_requested) LIKE ?)");
+    params.push(`%${search}%`, `%${search}%`, `%${search}%`);
+  }
+
+  const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
+  const rows = await allSql(`${bookingSelectSql(where)}${bookingOrderSql()}`, params);
+  return rows.map(toBookingResponse);
+}
+
+async function getBookingReports(reportMonth = toLocalDateString().slice(0, 7)) {
+  const today = toLocalDateString();
+  const tomorrow = toLocalDateString(new Date(Date.now() + 1000 * 60 * 60 * 24));
+  const rooms = await allSql("SELECT * FROM rooms WHERE status = 'available'");
+  const occupiedRows = await allSql(`
+    SELECT DISTINCT room_id
+    FROM bookings
+    WHERE room_id IS NOT NULL
+      AND status IN ('confirmed', 'checked_in')
+      AND check_in < ?
+      AND check_out > ?
+  `, [tomorrow, today]);
+  const occupiedRoomIds = new Set(occupiedRows.map((row) => row.room_id));
+  const bookings = await allSql("SELECT * FROM bookings");
+  const monthBookings = bookings.filter((booking) => String(booking.check_in || "").startsWith(reportMonth));
+  const byStatus = {};
+  const byPaymentStatus = {};
+
+  bookings.forEach((booking) => {
+    byStatus[booking.status] = (byStatus[booking.status] || 0) + 1;
+    byPaymentStatus[booking.payment_status] = (byPaymentStatus[booking.payment_status] || 0) + 1;
+  });
+
+  return {
+    availableRoomsToday: rooms.filter((room) => !occupiedRoomIds.has(room.id)).length,
+    occupiedRoomsToday: occupiedRoomIds.size,
+    pendingBookings: bookings.filter((booking) => booking.status === "pending").length,
+    confirmedBookings: bookings.filter((booking) => booking.status === "confirmed").length,
+    todayCheckIns: bookings.filter((booking) => booking.check_in === today && booking.status === "confirmed").length,
+    todayCheckOuts: bookings.filter((booking) => booking.check_out === today && ["confirmed", "checked_in"].includes(booking.status)).length,
+    unpaidBookings: bookings.filter((booking) => booking.payment_status === "unpaid").length,
+    totalRevenue: monthBookings
+      .filter((booking) => booking.payment_status === "paid")
+      .reduce((sum, booking) => sum + Number(booking.total_amount || 0), 0),
+    byStatus,
+    byPaymentStatus
+  };
+}
+
 function sanitizeAppointment(input) {
   const now = new Date().toISOString();
   const patient = sanitizePatient(input.patient);
@@ -344,6 +619,26 @@ function appointmentsToCsv(appointments) {
   return [header, ...rows].map((row) => row.map(csvEscape).join(",")).join("\n");
 }
 
+function bookingsToCsv(bookings) {
+  const header = ["ID", "Guest", "Phone", "Requested Room", "Assigned Room", "Check In", "Check Out", "Guests", "Status", "Payment", "Total", "Request", "Created At"];
+  const rows = bookings.map((booking) => [
+    booking.id,
+    booking.guestName,
+    booking.phone,
+    booking.roomTypeRequested,
+    booking.roomName,
+    booking.checkIn,
+    booking.checkOut,
+    booking.guests,
+    booking.status,
+    booking.paymentStatus,
+    booking.totalAmount,
+    booking.specialRequest,
+    booking.createdAt
+  ]);
+  return [header, ...rows].map((row) => row.map(csvEscape).join(",")).join("\n");
+}
+
 async function handleApi(req, res, url) {
   if (req.method === "POST" && url.pathname === "/api/auth/login") {
     const body = await readBody(req);
@@ -390,6 +685,42 @@ async function handleApi(req, res, url) {
     return;
   }
 
+  if (req.method === "POST" && url.pathname === "/api/bookings") {
+    const body = await readBody(req);
+    const validationError = validateBooking(body);
+    if (validationError) {
+      sendJson(res, 400, { error: validationError });
+      return;
+    }
+
+    const result = await runSql(`
+      INSERT INTO bookings (
+        guest_name,
+        phone,
+        email,
+        room_type_requested,
+        check_in,
+        check_out,
+        guests,
+        special_request,
+        status,
+        payment_status
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'unpaid')
+    `, [
+      normalizeText(body.guestName),
+      normalizeText(body.phone),
+      normalizeText(body.email),
+      normalizeText(body.roomTypeRequested),
+      normalizeText(body.checkIn),
+      normalizeText(body.checkOut),
+      Number(body.guests || 1),
+      normalizeText(body.specialRequest)
+    ]);
+
+    sendJson(res, 201, { booking: await getBookingById(result.lastID) });
+    return;
+  }
+
   if (req.method === "POST" && url.pathname === "/api/appointments") {
     const body = await readBody(req);
     const validationError = validateAppointment(body);
@@ -427,6 +758,38 @@ async function handleApi(req, res, url) {
     if (!requireAdmin(req, res)) return;
     const month = url.searchParams.get("month") || toLocalDateString().slice(0, 7);
     sendJson(res, 200, getAnalytics(readAppointments(), month));
+    return;
+  }
+
+  if (url.pathname === "/api/admin/bookings" && req.method === "GET") {
+    if (!requireAdmin(req, res)) return;
+    sendJson(res, 200, { bookings: await listBookings(url.searchParams) });
+    return;
+  }
+
+  if (url.pathname === "/api/admin/rooms" && req.method === "GET") {
+    if (!requireAdmin(req, res)) return;
+    const rows = await allSql("SELECT * FROM rooms ORDER BY room_name ASC");
+    sendJson(res, 200, { rooms: rows.map(toRoomResponse) });
+    return;
+  }
+
+  if (url.pathname === "/api/admin/booking-reports" && req.method === "GET") {
+    if (!requireAdmin(req, res)) return;
+    const month = url.searchParams.get("month") || toLocalDateString().slice(0, 7);
+    sendJson(res, 200, await getBookingReports(month));
+    return;
+  }
+
+  if (url.pathname === "/api/admin/bookings.csv" && req.method === "GET") {
+    if (!requireAdmin(req, res)) return;
+    const csv = bookingsToCsv(await listBookings(url.searchParams));
+    res.writeHead(200, {
+      "Content-Type": "text/csv; charset=utf-8",
+      "Content-Disposition": "attachment; filename=pension-bookings.csv",
+      "Cache-Control": "no-store"
+    });
+    res.end(csv);
     return;
   }
 
@@ -516,6 +879,99 @@ async function handleApi(req, res, url) {
     return;
   }
 
+  const bookingMatch = url.pathname.match(/^\/api\/admin\/bookings\/(\d+)$/);
+  if (bookingMatch && req.method === "DELETE") {
+    if (!requireAdmin(req, res)) return;
+    const result = await runSql("DELETE FROM bookings WHERE id = ?", [bookingMatch[1]]);
+    if (!result.changes) {
+      sendJson(res, 404, { error: "Booking not found" });
+      return;
+    }
+    sendJson(res, 200, { ok: true });
+    return;
+  }
+
+  const bookingStatusMatch = url.pathname.match(/^\/api\/admin\/bookings\/(\d+)\/status$/);
+  if (bookingStatusMatch && req.method === "PATCH") {
+    if (!requireAdmin(req, res)) return;
+    const body = await readBody(req);
+    if (!BOOKING_STATUSES.has(body.status)) {
+      sendJson(res, 400, { error: "Invalid booking status" });
+      return;
+    }
+
+    const result = await runSql(
+      "UPDATE bookings SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?",
+      [body.status, bookingStatusMatch[1]]
+    );
+    if (!result.changes) {
+      sendJson(res, 404, { error: "Booking not found" });
+      return;
+    }
+    sendJson(res, 200, { booking: await getBookingById(bookingStatusMatch[1]) });
+    return;
+  }
+
+  const bookingPaymentMatch = url.pathname.match(/^\/api\/admin\/bookings\/(\d+)\/payment$/);
+  if (bookingPaymentMatch && req.method === "PATCH") {
+    if (!requireAdmin(req, res)) return;
+    const body = await readBody(req);
+    const paymentStatus = normalizeText(body.paymentStatus);
+    const totalAmount = Number(body.totalAmount || 0);
+    if (!BOOKING_PAYMENT_STATUSES.has(paymentStatus)) {
+      sendJson(res, 400, { error: "Invalid payment status" });
+      return;
+    }
+    if (Number.isNaN(totalAmount) || totalAmount < 0) {
+      sendJson(res, 400, { error: "Total amount must be a valid number." });
+      return;
+    }
+
+    const result = await runSql(
+      "UPDATE bookings SET payment_status = ?, total_amount = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?",
+      [paymentStatus, totalAmount, bookingPaymentMatch[1]]
+    );
+    if (!result.changes) {
+      sendJson(res, 404, { error: "Booking not found" });
+      return;
+    }
+    sendJson(res, 200, { booking: await getBookingById(bookingPaymentMatch[1]) });
+    return;
+  }
+
+  const bookingRoomMatch = url.pathname.match(/^\/api\/admin\/bookings\/(\d+)\/room$/);
+  if (bookingRoomMatch && req.method === "PATCH") {
+    if (!requireAdmin(req, res)) return;
+    const body = await readBody(req);
+    const roomId = body.roomId ? Number(body.roomId) : null;
+    const booking = await getBookingById(bookingRoomMatch[1]);
+    if (!booking) {
+      sendJson(res, 404, { error: "Booking not found" });
+      return;
+    }
+    if (!roomId) {
+      await runSql("UPDATE bookings SET room_id = NULL, updated_at = CURRENT_TIMESTAMP WHERE id = ?", [bookingRoomMatch[1]]);
+      sendJson(res, 200, { booking: await getBookingById(bookingRoomMatch[1]) });
+      return;
+    }
+
+    const room = await getSql("SELECT * FROM rooms WHERE id = ? AND status = 'available'", [roomId]);
+    if (!room) {
+      sendJson(res, 400, { error: "Please choose an available active room." });
+      return;
+    }
+
+    const conflict = await findRoomConflict(roomId, booking.checkIn, booking.checkOut, booking.id);
+    if (conflict) {
+      sendJson(res, 409, { error: `Room overlaps with booking #${conflict.id} (${conflict.check_in} to ${conflict.check_out}).` });
+      return;
+    }
+
+    await runSql("UPDATE bookings SET room_id = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?", [roomId, bookingRoomMatch[1]]);
+    sendJson(res, 200, { booking: await getBookingById(bookingRoomMatch[1]) });
+    return;
+  }
+
   sendJson(res, 404, { error: "API route not found" });
 }
 
@@ -573,9 +1029,14 @@ const server = http.createServer(async (req, res) => {
 
 ensureDataFile();
 
-server.listen(PORT, () => {
-  console.log(`ACS clinic server running at http://localhost:${PORT}`);
-  if (!process.env.ADMIN_PASSWORD) {
-    console.log("Default admin login is secretary / change-this-password. Set ADMIN_PASSWORD before real use.");
-  }
+initBookingDb().then(() => {
+  server.listen(PORT, () => {
+    console.log(`ACS clinic and pension booking server running at http://localhost:${PORT}`);
+    if (!process.env.ADMIN_PASSWORD) {
+      console.log("Default admin login is secretary / change-this-password. Set ADMIN_PASSWORD before real use.");
+    }
+  });
+}).catch((error) => {
+  console.error("Unable to initialize pension booking database:", error);
+  process.exit(1);
 });

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Secretary Dashboard | Dr. Allan Dideles Medical Clinic</title>
+  <title>Clinic Dashboard | Dr. Allan Dideles Medical Clinic</title>
   <link rel="icon" type="image/jpeg" href="assets/images/acs%20logo.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,13 +16,14 @@
       <a class="brand" href="index.html">
         <img class="brand-mark" src="assets/images/acs%20logo.jpg" alt="" />
         <span class="brand-copy">
-          <strong>Secretary Dashboard</strong>
+          <strong>Clinic Dashboard</strong>
           <span>Dr. Allan Dideles Medical Clinic</span>
         </span>
       </a>
       <nav aria-label="Admin navigation">
         <ul>
           <li><a href="index.html"><span class="ui-icon" aria-hidden="true">⌂</span>HomePage</a></li>
+          <li><a class="nav-cta" href="booking-admin.html"><span class="ui-icon" aria-hidden="true">◇</span>Room Dashboard</a></li>
           <li><button class="button-link secondary-link" id="logoutBtn" type="button" hidden><span class="ui-icon" aria-hidden="true">↩</span>Logout</button></li>
           <li><button class="nav-cta button-link" id="printBtn" type="button" hidden><span class="ui-icon" aria-hidden="true">▣</span>Print Report</button></li>
         </ul>
@@ -137,7 +138,7 @@
           </div>
         </div>
 
-        <p class="form-message">File-based storage is suitable for this first server prototype. Use SQLite or PostgreSQL before production clinic use.</p>
+        <p class="form-message">Clinic appointments use the server-side clinic appointment database. Pension house bookings are managed in the separate room dashboard.</p>
       </div>
       </section>
     </div>

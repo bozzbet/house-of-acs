@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Room Booking Dashboard | ACS Pension House</title>
+  <link rel="icon" type="image/jpeg" href="assets/images/acs%20logo.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body class="admin-page booking-admin-page">
+  <header class="site-header">
+    <div class="container navbar">
+      <a class="brand" href="index.html">
+        <img class="brand-mark" src="assets/images/acs%20logo.jpg" alt="" />
+        <span class="brand-copy">
+          <strong>Room Booking Dashboard</strong>
+          <span>ACS Pension House</span>
+        </span>
+      </a>
+      <nav aria-label="Room booking admin navigation">
+        <ul>
+          <li><a href="index.html"><span class="ui-icon" aria-hidden="true">⌂</span>HomePage</a></li>
+          <li><a class="nav-cta" href="admin.html"><span class="ui-icon" aria-hidden="true">+</span>Clinic Dashboard</a></li>
+          <li><button class="button-link secondary-link" id="logoutBtn" type="button" hidden><span class="ui-icon" aria-hidden="true">↩</span>Logout</button></li>
+          <li><button class="nav-cta button-link" id="printBtn" type="button" hidden><span class="ui-icon" aria-hidden="true">▣</span>Print Report</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="login-section" id="loginSection">
+      <div class="container login-grid">
+        <div>
+          <p class="section-label">Pension House Login</p>
+          <h1>Secure Room Booking Access</h1>
+          <p>Sign in to view booking requests, assign rooms, update payment status, and export pension house reports.</p>
+        </div>
+        <form class="panel-form login-form" id="loginForm">
+          <div>
+            <label for="adminUsername">Username</label>
+            <input id="adminUsername" type="text" autocomplete="username" placeholder="secretary" required />
+          </div>
+          <div>
+            <label for="adminPassword">Password</label>
+            <input id="adminPassword" type="password" autocomplete="current-password" required />
+          </div>
+          <button class="btn btn-primary" type="submit"><span class="ui-icon" aria-hidden="true">↪</span>Login</button>
+          <p class="form-message" id="adminLoginMessage" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <div id="adminShell" hidden>
+      <section class="admin-hero">
+        <div class="container admin-hero-grid">
+          <div>
+            <p class="section-label">Pension House Dashboard</p>
+            <h1>Room Booking Requests</h1>
+            <p>Review guest inquiries, assign available rooms, confirm stays, update payment status, and export booking records.</p>
+          </div>
+          <div class="admin-note">
+            <strong>Signed in as <span id="adminUser">secretary</span></strong>
+            <span>Records are stored in the SQLite pension house booking database.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="admin-workspace">
+        <div class="container">
+          <div class="analytics-grid booking-analytics-grid" aria-label="Pension House Booking Analytics">
+            <article class="metric-card"><span>Available Rooms</span><strong id="availableRoomsToday">0</strong></article>
+            <article class="metric-card"><span>Occupied Rooms</span><strong id="occupiedRoomsToday">0</strong></article>
+            <article class="metric-card"><span>Pending Bookings</span><strong id="pendingBookings">0</strong></article>
+            <article class="metric-card"><span>Today's Check-ins</span><strong id="todayCheckIns">0</strong></article>
+            <article class="metric-card"><span>Today's Check-outs</span><strong id="todayCheckOuts">0</strong></article>
+            <article class="metric-card"><span>Unpaid</span><strong id="unpaidBookings">0</strong></article>
+          </div>
+
+          <div class="admin-toolbar booking-toolbar">
+            <div><label for="bookingFilterDate">Booking Date</label><input id="bookingFilterDate" type="text" placeholder="MM/DD/YYYY" inputmode="numeric" /></div>
+            <div><label for="bookingFilterMonth">Month</label><select id="bookingFilterMonth"></select></div>
+            <div><label for="bookingFilterYear">Year</label><select id="bookingFilterYear"></select></div>
+            <div><label for="bookingFilterStatus">Status</label><select id="bookingFilterStatus"><option value="">All Statuses</option><option>pending</option><option>confirmed</option><option>checked_in</option><option>checked_out</option><option>cancelled</option><option>no_show</option></select></div>
+            <div><label for="bookingPaymentFilter">Payment</label><select id="bookingPaymentFilter"><option value="">All Payments</option><option>unpaid</option><option>partial</option><option>paid</option><option>refunded</option></select></div>
+            <div><label for="bookingSearchText">Search</label><input id="bookingSearchText" type="search" placeholder="Guest or contact" /></div>
+            <button class="btn btn-outline" id="clearBookingFiltersBtn" type="button"><span class="ui-icon" aria-hidden="true">×</span>Clear</button>
+            <button class="btn btn-primary" id="exportBookingsCsvBtn" type="button"><span class="ui-icon" aria-hidden="true">⇩</span>Export CSV</button>
+          </div>
+
+          <div class="admin-table-panel">
+            <div class="preview-header">
+              <div>
+                <p class="section-label">Queue</p>
+                <h2>Booking Records</h2>
+              </div>
+            </div>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr><th>ID</th><th>Guest</th><th>Contact</th><th>Dates</th><th>Requested</th><th>Room</th><th>Status</th><th>Payment</th><th>Total</th><th>Request</th><th>Actions</th></tr>
+                </thead>
+                <tbody id="adminBookingTable"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <p class="form-message">Pension house bookings are stored in SQLite at private-data/pension-booking.db.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="assets/js/booking-admin.js"></script>
+</body>
+</html>
